@@ -1,0 +1,81 @@
+<% layout('layouts/boilerplate') -%>
+<body>
+  <div class="row" id="row">
+    <div class="col-8 offset-2">
+      <br>
+      <h2>Add a new Hotel</h2>
+      <br>
+      <form method="post" action="/listing">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input
+            type="text"
+            name="title"
+            placeholder="title"
+            required
+            id="title"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="desc" class="form-label">Description of Place</label>
+          <textarea
+            name="desc"
+            rows="5"
+            cols="20"
+            placeholder="Enter description"
+            id="desc"
+            class="form-control"
+          ></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="image" class="form-label">Image URL</label>
+          <input
+            type="text"
+            name="image"
+            placeholder="image"
+            id="image"
+            class="form-control"
+          />
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="price" class="form-label">Enter Price</label>
+            <input
+              type="number"
+              name="price"
+              placeholder="price"
+              required
+              id="price"
+              class="form-control"
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="country" class="form-label">Enter Country</label>
+            <input
+              type="text"
+              name="country"
+              placeholder="country"
+              required
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="location" class="form-label">Enter Location</label>
+          <input
+            type="text"
+            name="location"
+            placeholder="location"
+            required
+            id="location"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <button class="btn btn-dark" >Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>

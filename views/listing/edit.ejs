@@ -1,0 +1,88 @@
+<% layout('layouts/boilerplate') -%>
+<body>
+  <div class="row" id="row">
+    <div class="col-8 offset-2">
+      <br />
+      <h2>Edit</h2>
+      <br />
+      <form action="/listing/<%=list._id%>?_method=PATCH" method="Post">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input
+            class="form-control"
+            type="text"
+            name="title"
+            placeholder="title"
+            id="title"
+            value="<%=list.title%>"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            name="desc"
+            rows="5"
+            cols="20"
+            placeholder="Enter description"
+            id="description"
+            class="form-control"
+          >
+    <%=list.desc%></textarea
+          >
+        </div>
+        <div class="mb-3">
+          <label for="image" class="form-label">Image URL</label>
+          <input
+            type="text"
+            name="image"
+            placeholder="image"
+            value="<%=list.image%>"
+            id="image"
+            class="form-control"
+          />
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="price" class="form-label">Price</label>
+              <input
+                type="number"
+                name="price"
+                placeholder="price"
+                value="<%=list.price%>"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="country" class="form-label">Country</label>
+              <input
+                type="text"
+                name="country"
+                placeholder="country"
+                value="<%=list.country%>"
+                id="country"
+                class="form-control"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="location" class="form-label">Location</label>
+          <input
+            type="text"
+            name="location"
+            placeholder="location"
+            value="<%=list.location%>"
+            id="location"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <button class="btn btn-dark">Edit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>

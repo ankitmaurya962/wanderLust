@@ -5,7 +5,7 @@
       <br>
       <h2>Add a new Hotel</h2>
       <br>
-      <form method="post" action="/listing">
+      <form method="post" action="/listing" class="needs-validation" novalidate >
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -42,7 +42,6 @@
           <div class="col-md-6 mb-3">
             <label for="price" class="form-label">Enter Price</label>
             <input
-              type="number"
               name="price"
               placeholder="price"
               required

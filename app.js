@@ -4,6 +4,8 @@ const Listing = require("./models/listing");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const CustomError = require("./utils/CustomError");
+const wrapAsync = require("./utils/wrapAsync");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -22,55 +24,67 @@ main()
   .catch((err) => console.log(err));
 
 //home
-app.get("/", async (req, res) => {
+app.get("/", wrapAsync(async(req, res, next) => {
   res.send("home route");
-});
+}));
+
 //index route
-app.get("/listing", async (req, res) => {
+app.get("/listing", wrapAsync(async (req, res, next) => {
   const AllList = await Listing.find({});
   res.render("./listing/index.ejs", { AllList });
-});
+}));
 
 //new route
-app.get("/listing/new", async (req, res) => {
+app.get("/listing/new", wrapAsync(async (req, res, next) => {
   res.render("./listing/new");
-});
+}));
 //create
-app.post("/listing", async (req, res) => {
+app.post("/listing", wrapAsync(async (req, res, next) => {
+  //if form is empty
+  if(!req.body) throw new CustomError(400, "send valid data from listing")
   const list = new Listing(req.body);
   await list.save().then(() => console.log(list));
   res.redirect("/listing");
-});
+}));
 
 //show
-app.get("/listing/:id", async (req, res) => {
+app.get("/listing/:id", wrapAsync(async (req, res, next) => {
   const { id } = req.params;
   const data = await Listing.findById(id);
   res.render("./listing/show.ejs", { data });
-});
+}));
 
 //edit route
-app.get("/listing/:id/edit", async (req, res) => {
+app.get("/listing/:id/edit", wrapAsync(async (req, res, next) => {
   const { id } = req.params;
   const list = await Listing.findById(id);
   res.render("./listing/edit", { list });
-});
+}));
 
-app.patch("/listing/:id", async (req, res) => {
+app.patch("/listing/:id", wrapAsync(async (req, res, next) => {
   const { id } = req.params;
   const newList = req.body;
-  const list = await Listing.findByIdAndUpdate(id, newList, { new: true });
-  console.log(list);
+  await Listing.findByIdAndUpdate(id, newList, { new: true });
   res.redirect("/listing");
-});
+}));
 
 //delete
-app.delete("/listing/:id", async (req, res) => {
+app.delete("/listing/:id", wrapAsync(async (req, res ,next) => {
   const { id } = req.params;
   const deleted = await Listing.findByIdAndDelete(id);
   console.log(deleted);
   res.redirect("/listing");
-});
+}));
+
+//if page is not found (if no route is found)
+app.use((req, res, next)=>{
+  next(new CustomError(404, "page not found"));
+})
+
+app.use((err, req ,res, next)=>{
+  let{status = 500, message = "something went wrong"} = err;
+  res.status(status).render("error", {message});
+})
 
 app.listen(8080, () => {
   console.log("listening on port 8080");

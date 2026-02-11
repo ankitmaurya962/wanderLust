@@ -6,10 +6,12 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const CustomError = require("./utils/CustomError");
 const wrapAsync = require("./utils/wrapAsync");
+const listingSchema = require("./schema");
 
 const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
@@ -23,68 +25,106 @@ main()
   .then(() => console.log("connected DB"))
   .catch((err) => console.log(err));
 
+const validate = (req, res, next) => {
+  let { error } = listingSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details.map((el)=> el.message).join(",");
+    throw new CustomError(400, error);
+  }else{
+    next();
+  }
+};
 //home
-app.get("/", wrapAsync(async(req, res, next) => {
-  res.send("home route");
-}));
+app.get(
+  "/",
+  wrapAsync(async (req, res, next) => {
+    res.send("home route");
+  }),
+);
 
 //index route
-app.get("/listing", wrapAsync(async (req, res, next) => {
-  const AllList = await Listing.find({});
-  res.render("./listing/index.ejs", { AllList });
-}));
+app.get(
+  "/listing",
+  validate,
+  wrapAsync(async (req, res, next) => {
+    const AllList = await Listing.find({});
+    res.render("./listing/index.ejs", { AllList });
+  }),
+);
 
 //new route
-app.get("/listing/new", wrapAsync(async (req, res, next) => {
-  res.render("./listing/new");
-}));
+app.get(
+  "/listing/new",
+  validate,
+  wrapAsync(async (req, res, next) => {
+    res.render("./listing/new");
+  }),
+);
 //create
-app.post("/listing", wrapAsync(async (req, res, next) => {
-  //if form is empty
-  if(!req.body) throw new CustomError(400, "send valid data from listing")
-  const list = new Listing(req.body);
-  await list.save().then(() => console.log(list));
-  res.redirect("/listing");
-}));
+app.post(
+  "/listing",
+  validate,
+  wrapAsync(async (req, res, next) => {
+    const list = new Listing(req.body);
+    await list.save().then(() => console.log(list));
+    res.redirect("/listing");
+  }),
+);
 
 //show
-app.get("/listing/:id", wrapAsync(async (req, res, next) => {
-  const { id } = req.params;
-  const data = await Listing.findById(id);
-  res.render("./listing/show.ejs", { data });
-}));
+app.get(
+  "/listing/:id",
+  validate,
+  wrapAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const data = await Listing.findById(id);
+    res.render("./listing/show.ejs", { data });
+  }),
+);
 
 //edit route
-app.get("/listing/:id/edit", wrapAsync(async (req, res, next) => {
-  const { id } = req.params;
-  const list = await Listing.findById(id);
-  res.render("./listing/edit", { list });
-}));
+app.get(
+  "/listing/:id/edit",
+  validate,
+  wrapAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const list = await Listing.findById(id);
+    res.render("./listing/edit", { list });
+  }),
+);
 
-app.patch("/listing/:id", wrapAsync(async (req, res, next) => {
-  const { id } = req.params;
-  const newList = req.body;
-  await Listing.findByIdAndUpdate(id, newList, { new: true });
-  res.redirect("/listing");
-}));
+app.patch(
+  "/listing/:id",
+  validate,
+  wrapAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const newList = req.body;
+    await Listing.findByIdAndUpdate(id, newList, { new: true });
+    res.redirect("/listing");
+  }),
+);
 
 //delete
-app.delete("/listing/:id", wrapAsync(async (req, res ,next) => {
-  const { id } = req.params;
-  const deleted = await Listing.findByIdAndDelete(id);
-  console.log(deleted);
-  res.redirect("/listing");
-}));
+app.delete(
+  "/listing/:id",
+  validate,
+  wrapAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const deleted = await Listing.findByIdAndDelete(id);
+    console.log(deleted);
+    res.redirect("/listing");
+  }),
+);
 
 //if page is not found (if no route is found)
-app.use((req, res, next)=>{
+app.use((req, res, next) => {
   next(new CustomError(404, "page not found"));
-})
+});
 
-app.use((err, req ,res, next)=>{
-  let{status = 500, message = "something went wrong"} = err;
-  res.status(status).render("error", {message});
-})
+app.use((err, req, res, next) => {
+  let { status = 500, message = "something went wrong" } = err;
+  res.status(status).render("error", { message });
+});
 
 app.listen(8080, () => {
   console.log("listening on port 8080");

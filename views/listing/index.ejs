@@ -1,25 +1,34 @@
 <% layout('layouts/boilerplate') -%>
 
-<body>
-  <h1>All list of places</h1>
-  <!-- <form action="/listing/new">
-        <button>Add New</button>
-    </form> -->
-  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1" id="cards">
-    <%for(let list of AllList){%>
-    <a href="listing/<%=list.id%>" style="text-decoration: none;">
-      <div class="card cols">
-        <img src="<%=list.image%>" class="card-img-top" alt="..." style="height: 20rem; object-fit: cover;">
-        <div class="card-img-overlay">
-        </div>
+<h1>All list of places</h1>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1" id="cards">
+  <% for(let list of AllList){ %>
+
+  <div class="col">
+    <a href="/listing/<%= list._id %>" style="text-decoration: none;">
+      
+      <div class="card">
+        <img 
+          src="<%= list.image %>" 
+          class="card-img-top" 
+          style="height:20rem; object-fit:cover;"
+        >
+
+        <div class="card-img-overlay"></div>
+
         <div class="card-body">
-          <h5 class="card-title"><%=list.title%></h5>
+          <h5 class="card-title"><%= list.title %></h5>
+
           <p class="card-text">
-            &#8377;<%=list.price.toLocaleString("en-IN")%>/night
+            &#8377;<%= list.price.toLocaleString("en-IN") %>/night
           </p>
         </div>
+
       </div>
+
     </a>
-    <%}%>
   </div>
-</body>
+
+  <% } %>
+</div>

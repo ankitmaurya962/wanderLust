@@ -6,7 +6,8 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const CustomError = require("./utils/CustomError");
 const wrapAsync = require("./utils/wrapAsync");
-const listingSchema = require("./schema");
+const { listingSchema, reviewSchema } = require("./schema");
+const Review = require("./models/review");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -25,11 +26,23 @@ main()
   .then(() => console.log("connected DB"))
   .catch((err) => console.log(err));
 
+//validation for listing
 const validate = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
   if (error) {
-    let errMsg = error.details.map((el)=> el.message).join(",");
-    throw new CustomError(400, error);
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new CustomError(400, errMsg);
+  } else {
+    next();
+  }
+};
+//review validation
+const reviewValidate = (req, res, next) => {
+  const { error } = reviewSchema.validate(req.body);
+
+  if (error) {
+    const errMsg = error.details.map(el => el.message).join(",");
+    throw new CustomError(400, errMsg);
   }else{
     next();
   }
@@ -45,7 +58,6 @@ app.get(
 //index route
 app.get(
   "/listing",
-  validate,
   wrapAsync(async (req, res, next) => {
     const AllList = await Listing.find({});
     res.render("./listing/index.ejs", { AllList });
@@ -55,7 +67,6 @@ app.get(
 //new route
 app.get(
   "/listing/new",
-  validate,
   wrapAsync(async (req, res, next) => {
     res.render("./listing/new");
   }),
@@ -74,10 +85,9 @@ app.post(
 //show
 app.get(
   "/listing/:id",
-  validate,
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
-    const data = await Listing.findById(id);
+    const data = await Listing.findById(id).populate("reviews");
     res.render("./listing/show.ejs", { data });
   }),
 );
@@ -85,7 +95,6 @@ app.get(
 //edit route
 app.get(
   "/listing/:id/edit",
-  validate,
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const list = await Listing.findById(id);
@@ -107,12 +116,28 @@ app.patch(
 //delete
 app.delete(
   "/listing/:id",
-  validate,
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const deleted = await Listing.findByIdAndDelete(id);
     console.log(deleted);
     res.redirect("/listing");
+  }),
+);
+
+//review
+app.post(
+  "/listing/:id/reviews",
+  reviewValidate,
+  wrapAsync(async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    console.log(req.body);
+    let newReview = new Review(req.body.review);
+    listing.reviews.push(newReview._id);
+
+    await newReview.save();
+    await listing.save();
+
+    res.redirect(`/listing/${listing._id}`);
   }),
 );
 

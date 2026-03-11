@@ -21,10 +21,10 @@
           </p>
           <div class="button-container">
             <form action="/listing/<%=data._id%>/edit">
-              <button class="btn btn-dark">Edit</button>
+              <button class="btn btn-dark listing-button">Edit</button>
             </form>
             <form action="/listing/<%=data._id%>?_method=DELETE" method="post">
-              <button class="btn btn-primary">Delete</button>
+              <button class="btn btn-primary listing-button">Delete</button>
             </form>
           </div>
           <br>
@@ -53,6 +53,9 @@
                 <p class="card-text"><%=review.comments%></p>
                 <p class="card-text"><%=review.rating%> stars</p>
               </div>
+              <form action="/listing/<%=data._id%>/reviews/<%=review._id%>?_method=DELETE" method="post">
+                <button class="btn btn-sm btn-dark mb-3 ms-3"> Delete</button>
+              </form>
             </div>
             <%} %>
           </div>

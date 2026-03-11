@@ -37,11 +37,11 @@ body{
     opacity: 0.2;
 }
 /* new listing */
-.btn{
+.listing-button{
     background-color: #FF385C !important;
     border: none !important;
 }
-.btn:hover{
+.listing-button:hover{
     background-color: #eb2e51 !important;
 }
 

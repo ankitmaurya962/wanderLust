@@ -1,13 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Listing = require("./models/listing");
+const Review = require("./models/review");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const CustomError = require("./utils/CustomError");
 const wrapAsync = require("./utils/wrapAsync");
 const { listingSchema, reviewSchema } = require("./schema");
-const Review = require("./models/review");
+
 
 const app = express();
 app.set("view engine", "ejs");
@@ -41,9 +42,9 @@ const reviewValidate = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
 
   if (error) {
-    const errMsg = error.details.map(el => el.message).join(",");
+    const errMsg = error.details.map((el) => el.message).join(",");
     throw new CustomError(400, errMsg);
-  }else{
+  } else {
     next();
   }
 };
@@ -138,6 +139,16 @@ app.post(
     await listing.save();
 
     res.redirect(`/listing/${listing._id}`);
+  }),
+);
+//delete review
+app.delete(
+  "/listing/:listingId/reviews/:ReviewId",
+  wrapAsync(async (req, res) => {
+    const { listingId, ReviewId } = req.params;
+    await Review.findByIdAndDelete(ReviewId);
+    await Listing.findByIdAndUpdate(listingId, {$pull: {reviews: ReviewId}})
+    res.redirect(`/listing/${listingId}`);
   }),
 );
 

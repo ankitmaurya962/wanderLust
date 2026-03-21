@@ -1,0 +1,13 @@
+<!-- success alert -->
+<%if(msg && msg.length){%>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <%=msg%>
+    </div>
+<%}%>
+
+<!-- error alert -->
+<%if(error && error.length){%>
+    <div class="alert alert-danger alert-dismissible fade show " role="alert">
+        <%=error%>
+    </div>
+<%}%> 

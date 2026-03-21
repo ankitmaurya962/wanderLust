@@ -5,6 +5,7 @@ const wrapAsync = require("../utils/wrapAsync");
 const { listingSchema} = require("../schema");
 const CustomError = require("../utils/CustomError");
 
+
 //validation for listing
 const validate = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
@@ -38,7 +39,8 @@ router.post(
   validate,
   wrapAsync(async (req, res, next) => {
     const list = new Listing(req.body);
-    await list.save().then(() => console.log(list));
+    await list.save();
+    req.flash("success", "new listing added");
     res.redirect("/listing");
   }),
 );
@@ -49,6 +51,10 @@ router.get(
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const data = await Listing.findById(id).populate("reviews");
+    if(!data){
+      req.flash("error","Lisiting does not exists !");
+      return res.redirect("/listing");
+    }
     res.render("./listing/show.ejs", { data });
   }),
 );
@@ -59,6 +65,10 @@ router.get(
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const list = await Listing.findById(id);
+    if(!list){
+      req.flash("error","Listing does not exists !");
+      return res.redirect("/listing");
+    }
     res.render("./listing/edit", { list });
   }),
 );
@@ -69,7 +79,8 @@ router.patch(
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const newList = req.body;
-    await Listing.findByIdAndUpdate(id, newList, { new: true });
+    await Listing.findByIdAndUpdate(id, newList);
+    req.flash("success", "Lisiting updated!");
     res.redirect("/listing");
   }),
 );
@@ -79,8 +90,8 @@ router.delete(
   "/:id",
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
-    const deleted = await Listing.findByIdAndDelete(id);
-    console.log(deleted);
+    await Listing.findByIdAndDelete(id);
+    req.flash("success", "Lisiting Deleted!");
     res.redirect("/listing");
   }),
 );

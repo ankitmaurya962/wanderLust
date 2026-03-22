@@ -7,6 +7,9 @@ const CustomError = require("./utils/CustomError");
 const wrapAsync = require("./utils/wrapAsync");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const localStrategy = require("passport-local");
+const User = require("./models/user.js");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -31,8 +34,9 @@ async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
 }
 
-const listing = require("./routes/listing.js");
-const review = require("./routes/review.js");
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
 
 main()
   .then(() => console.log("connected DB"))
@@ -42,15 +46,32 @@ main()
 app.use(session(sessionOption));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser()); 
+
 //middleware for flash
 app.use((req, res, next)=>{
   res.locals.msg = req.flash("success");
   res.locals.error = req.flash("error");
   next();
 })
-app.use("/listing", listing);
-app.use("/listing/:id", review);
+app.use("/listing", listingRouter);
+app.use("/listing/:id", reviewRouter);
+app.use("/", userRouter);
 
+
+//demouser
+app.get("/demouser", async(req, res)=>{
+  const fakeUser = new User({
+    email: "fake@123",
+    username: "fake123",
+  });
+  let registeredUser = await User.register(fakeUser, "hellowpass");
+  res.send(registeredUser);
+})
 //home
 app.get(
   "/",
@@ -68,6 +89,7 @@ app.use((err, req, res, next) => {
   let { status = 500, message = "something went wrong" } = err;
   res.status(status).render("error", { message });
 });
+
 
 app.listen(8080, () => {
   console.log("listening on port 8080");

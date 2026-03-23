@@ -5,7 +5,7 @@ const Review = require("../models/review");
 const CustomError = require("../utils/CustomError");
 const wrapAsync = require("../utils/wrapAsync");
 const {reviewSchema } = require("../schema");
-
+const {isLoggedIn} = require("../middleware");
 //review validation
 const reviewValidate = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
@@ -22,6 +22,7 @@ const reviewValidate = (req, res, next) => {
 router.post(
   "/reviews",
   reviewValidate,
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let listing = await Listing.findById(req.params.id);
     let newReview = new Review(req.body.review);
@@ -36,6 +37,7 @@ router.post(
 //delete review
 router.delete(
   "/reviews/:ReviewId",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     const { id, ReviewId } = req.params;
     await Review.findByIdAndDelete(ReviewId);

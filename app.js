@@ -56,22 +56,13 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next)=>{
   res.locals.msg = req.flash("success");
   res.locals.error = req.flash("error");
+  res.locals.currUser = req.user;
   next();
 })
 app.use("/listing", listingRouter);
 app.use("/listing/:id", reviewRouter);
 app.use("/", userRouter);
 
-
-//demouser
-app.get("/demouser", async(req, res)=>{
-  const fakeUser = new User({
-    email: "fake@123",
-    username: "fake123",
-  });
-  let registeredUser = await User.register(fakeUser, "hellowpass");
-  res.send(registeredUser);
-})
 //home
 app.get(
   "/",

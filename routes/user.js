@@ -14,9 +14,14 @@ router.post(
     try {
       const { username, email, password } = req.body;
       const newUser = new User({ username, email });
-      await User.register(newUser, password);
-      req.flash("success", "user registered successfully!");
-      res.redirect("/listing");
+      const registeredUser = await User.register(newUser, password);
+      req.login(registeredUser, (err) => {
+        if (err) {
+          return next(err);
+        }
+        req.flash("success", "welcome to wanderlust !");
+        res.redirect("/listing");
+      });
     } catch (e) {
       req.flash("error", e.message);
       res.redirect("/signup");
@@ -35,10 +40,20 @@ router.post(
     failureRedirect: "/signin",
     failureFlash: true,
   }),
-  async(req, res) => {
+  async (req, res) => {
     req.flash("success", "Welcome back!");
     res.redirect("/listing");
-  }
+  },
 );
+
+router.get("/logout", (req, res) => {
+  req.logOut((err) => {
+    if (err) {
+      return next(err);
+    }
+    req.flash("success", "Logged you out !");
+    res.redirect("/listing");
+  });
+});
 
 module.exports = router;

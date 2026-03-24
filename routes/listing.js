@@ -33,8 +33,8 @@ router.get("/new", isLoggedIn, (req, res) => {
 //create
 router.post(
   "/",
-  validate,
   isLoggedIn,
+  validate,
   wrapAsync(async (req, res, next) => {
     const list = new Listing(req.body);
     await list.save();

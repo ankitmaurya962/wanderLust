@@ -59,6 +59,7 @@ app.use((req, res, next)=>{
   res.locals.currUser = req.user;
   next();
 })
+
 app.use("/listing", listingRouter);
 app.use("/listing/:id", reviewRouter);
 app.use("/", userRouter);

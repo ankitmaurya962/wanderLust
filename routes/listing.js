@@ -2,20 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync");
-const { listingSchema} = require("../schema");
-const CustomError = require("../utils/CustomError");
-const {isLoggedIn} = require("../middleware");
-
-//validation for listing
-const validate = (req, res, next) => {
-  let { error } = listingSchema.validate(req.body);
-  if (error) {
-    let errMsg = error.details.map((el) => el.message).join(",");
-    throw new CustomError(400, errMsg);
-  } else {
-    next();
-  }
-};
+const {isLoggedIn, isOwner, validate} = require("../middleware");
 
 //index route
 router.get(
@@ -37,6 +24,7 @@ router.post(
   validate,
   wrapAsync(async (req, res, next) => {
     const list = new Listing(req.body);
+    list.owner = req.user._id;
     await list.save();
     req.flash("success", "new listing added");
     res.redirect("./listing");
@@ -48,9 +36,9 @@ router.get(
   "/:id",
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
-    const data = await Listing.findById(id).populate("reviews");
+    const data = await Listing.findById(id).populate("reviews").populate("owner");
     if(!data){
-      req.flash("error","Lisiting does not exists !");
+      req.flash("error","Listing does not exists !");
       return res.redirect("/listing");
     }
     res.render("./listing/show.ejs", { data });
@@ -61,6 +49,7 @@ router.get(
 router.get(
   "/:id/edit",
   isLoggedIn,
+  isOwner,
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const list = await Listing.findById(id);
@@ -74,8 +63,9 @@ router.get(
 
 router.patch(
   "/:id",
-  validate,
   isLoggedIn,
+  isOwner,
+  validate,
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const newList = req.body;
@@ -89,6 +79,7 @@ router.patch(
 router.delete(
   "/:id",
   isLoggedIn,
+  isOwner,
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     await Listing.findByIdAndDelete(id);

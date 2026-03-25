@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync");
-const {isLoggedIn, isOwner, validate} = require("../middleware");
+const { isLoggedIn, isOwner, validate } = require("../middleware");
+const review = require("../models/review");
 
 //index route
 router.get(
@@ -36,9 +37,11 @@ router.get(
   "/:id",
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
-    const data = await Listing.findById(id).populate("reviews").populate("owner");
-    if(!data){
-      req.flash("error","Listing does not exists !");
+    const data = await Listing.findById(id)
+      .populate({ path: "reviews", populate: { path: "author" } })
+      .populate("owner");
+    if (!data) {
+      req.flash("error", "Listing does not exists !");
       return res.redirect("/listing");
     }
     res.render("./listing/show.ejs", { data });
@@ -53,8 +56,8 @@ router.get(
   wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const list = await Listing.findById(id);
-    if(!list){
-      req.flash("error","Listing does not exists !");
+    if (!list) {
+      req.flash("error", "Listing does not exists !");
       return res.redirect("/listing");
     }
     res.render("./listing/edit", { list });

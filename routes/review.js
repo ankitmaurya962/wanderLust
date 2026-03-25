@@ -4,7 +4,7 @@ const Listing = require("../models/listing");
 const Review = require("../models/review");
 const wrapAsync = require("../utils/wrapAsync");
 const {isLoggedIn} = require("../middleware");
-const{reviewValidate} = require("../middleware");
+const{reviewValidate, isAuthor} = require("../middleware");
 
 //review
 router.post(
@@ -14,6 +14,7 @@ router.post(
   wrapAsync(async (req, res) => {
     let listing = await Listing.findById(req.params.id);
     let newReview = new Review(req.body.review);
+    newReview.author = req.user._id;
     listing.reviews.push(newReview._id);
 
     await newReview.save();
@@ -26,6 +27,7 @@ router.post(
 router.delete(
   "/reviews/:ReviewId",
   isLoggedIn,
+  isAuthor,
   wrapAsync(async (req, res) => {
     const { id, ReviewId } = req.params;
     await Review.findByIdAndDelete(ReviewId);

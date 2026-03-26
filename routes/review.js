@@ -22,5 +22,4 @@ router.delete(
   wrapAsync(reviewController.destroyReview),
 );
 
-
 module.exports = router;

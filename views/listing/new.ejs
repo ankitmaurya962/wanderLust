@@ -5,7 +5,7 @@
       <br>
       <h2>Add a new Hotel</h2>
       <br>
-      <form method="post" action="/listing" class="needs-validation" novalidate >
+      <form method="post" action="/listing" class="needs-validation" novalidate enctype="multipart/form-data">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -28,10 +28,20 @@
             class="form-control"
           ></textarea>
         </div>
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label for="image" class="form-label">Image URL</label>
           <input
             type="text"
+            name="image"
+            placeholder="image"
+            id="image"
+            class="form-control"
+          />
+        </div> -->
+        <div class="mb-3">
+          <label for="image" class="form-label">Upload Image</label>
+          <input
+            type="file"
             name="image"
             placeholder="image"
             id="image"

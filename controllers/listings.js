@@ -1,4 +1,5 @@
 const Listing = require("../models/listing");
+const getCoordinates = require("../utils/geocoding"); 
 
 module.exports.index = async (req, res, next) => {
   const AllList = await Listing.find({});
@@ -14,7 +15,10 @@ module.exports.newListing = async (req, res, next) => {
   list.owner = req.user._id;
   let url = req.file.path;
   let filename = req.file.filename;
-  list.image = {url, filename};
+  list.image = { url, filename };
+  //coordinates
+  const geometry = await getCoordinates(req.body.location);
+  list.geometry = geometry;
   await list.save();
   req.flash("success", "new listing added");
   res.redirect("./listing");
@@ -39,13 +43,22 @@ module.exports.renderEditForm = async (req, res, next) => {
     req.flash("error", "Listing does not exists !");
     return res.redirect("/listing");
   }
-  res.render("./listing/edit", { list });
+  const originalUrl = list.image.url;
+  const modifiedUrl = originalUrl.replace("/upload", "/upload/h_150,w_200");
+  res.render("./listing/edit", { list, modifiedUrl});
 };
 
 module.exports.edit = async (req, res, next) => {
   const { id } = req.params;
   const newList = req.body;
-  await Listing.findByIdAndUpdate(id, newList);
+  const list = await Listing.findByIdAndUpdate(id, newList);
+  if (req.file) {
+    const url = req.file.path;
+    const filename = req.file.filename;
+    list.image.url = url;
+    list.image.filename = filename;
+    await list.save();
+  }
   req.flash("success", "Lisiting updated!");
   res.redirect("/listing");
 };

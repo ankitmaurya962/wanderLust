@@ -5,7 +5,7 @@
       <br />
       <h2>Edit</h2>
       <br />
-      <form action="/listing/<%=list._id%>?_method=PATCH" method="Post">
+      <form action="/listing/<%=list._id%>?_method=PATCH" method="Post" enctype="multipart/form-data">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -27,16 +27,17 @@
             id="description"
             class="form-control"
           >
-    <%=list.desc%></textarea
-          >
+          <%=list.desc%></textarea>
         </div>
         <div class="mb-3">
-          <label for="image" class="form-label">Image URL</label>
+          <img src="<%=modifiedUrl%>" class="edit-image">
+        </div>
+        <div class="mb-3">
+          <label for="image" class="form-label">Upload Image </label>
           <input
-            type="text"
+            type="file"
             name="image"
             placeholder="image"
-            value="<%=list.image%>"
             id="image"
             class="form-control"
           />

@@ -1,5 +1,4 @@
 require('dotenv').config() ;
-console.log(process.env.SECRET);
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -22,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
+
 const sessionOption = {
   secret: "AnkitSecretKey",
   resave: false,

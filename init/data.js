@@ -4,7 +4,10 @@ const sampleListings = [
   {
     title: "Luxury Beachside Villa",
     desc: "A stunning villa with ocean view, private pool, and modern interiors.",
-    image: "https://images.unsplash.com/photo-1729720281814-5ddf34c69f8b?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1729720281814-5ddf34c69f8b?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-1",
+    },
     price: 15000,
     location: "Goa",
     country: "India",
@@ -12,7 +15,10 @@ const sampleListings = [
   {
     title: "Mountain View Cottage",
     desc: "Peaceful cottage surrounded by mountains and fresh air.",
-    image: "https://images.unsplash.com/photo-1566301738357-2e0cc60c4d40?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1566301738357-2e0cc60c4d40?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-2",
+    },
     price: 6000,
     location: "Manali",
     country: "India",
@@ -20,7 +26,10 @@ const sampleListings = [
   {
     title: "City Center Apartment",
     desc: "Modern apartment located in the heart of the city.",
-    image: "https://images.unsplash.com/photo-1733587820244-83fd93e30052?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1733587820244-83fd93e30052?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-3",
+    },
     price: 8000,
     location: "Mumbai",
     country: "India",
@@ -28,7 +37,10 @@ const sampleListings = [
   {
     title: "Desert Camp Stay",
     desc: "Traditional desert camp experience with cultural programs.",
-    image: "https://images.unsplash.com/photo-1762970913723-21d3c7f5846c?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1762970913723-21d3c7f5846c?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-4",
+    },
     price: 5000,
     location: "Jaisalmer",
     country: "India",
@@ -36,7 +48,10 @@ const sampleListings = [
   {
     title: "Hilltop Resort",
     desc: "Resort offering breathtaking hill views and luxury stay.",
-    image: "https://images.unsplash.com/photo-1665930152500-26acb7c86076?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1665930152500-26acb7c86076?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-5",
+    },
     price: 12000,
     location: "Ooty",
     country: "India",
@@ -44,7 +59,10 @@ const sampleListings = [
   {
     title: "Lake View Homestay",
     desc: "Comfortable homestay overlooking a serene lake.",
-    image: "https://images.unsplash.com/photo-1563768562818-d16e87ffbf6a?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1563768562818-d16e87ffbf6a?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-6",
+    },
     price: 7000,
     location: "Udaipur",
     country: "India",
@@ -52,7 +70,10 @@ const sampleListings = [
   {
     title: "Forest Tree House",
     desc: "Unique tree house stay inside a lush green forest.",
-    image: "https://images.unsplash.com/photo-1633830902223-727413dfad8f?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1633830902223-727413dfad8f?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-7",
+    },
     price: 9000,
     location: "Wayanad",
     country: "India",
@@ -60,7 +81,10 @@ const sampleListings = [
   {
     title: "Royal Heritage Palace",
     desc: "Live like royalty in this beautifully restored palace.",
-    image: "https://images.unsplash.com/photo-1738482224201-eb499b160d72?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1738482224201-eb499b160d72?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-8",
+    },
     price: 20000,
     location: "Jaipur",
     country: "India",
@@ -68,7 +92,10 @@ const sampleListings = [
   {
     title: "Riverside Cottage",
     desc: "Cozy cottage located beside a flowing river.",
-    image: "https://images.unsplash.com/photo-1707044093117-970e52b649aa?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1707044093117-970e52b649aa?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-9",
+    },
     price: 6500,
     location: "Rishikesh",
     country: "India",
@@ -76,7 +103,10 @@ const sampleListings = [
   {
     title: "Luxury City Hotel",
     desc: "Premium hotel with world-class amenities.",
-    image: "https://images.unsplash.com/photo-1721539151779-e6dc7f9de376?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1721539151779-e6dc7f9de376?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-10",
+    },
     price: 14000,
     location: "Delhi",
     country: "India",
@@ -84,7 +114,10 @@ const sampleListings = [
   {
     title: "Backwater Houseboat",
     desc: "Relaxing houseboat experience in peaceful backwaters.",
-    image: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-11",
+    },
     price: 11000,
     location: "Alleppey",
     country: "India",
@@ -92,7 +125,10 @@ const sampleListings = [
   {
     title: "Snow View Chalet",
     desc: "Wooden chalet with mesmerizing snow views.",
-    image: "https://images.unsplash.com/photo-1547632115-a85b28cbfb87?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1547632115-a85b28cbfb87?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-12",
+    },
     price: 10000,
     location: "Gulmarg",
     country: "India",
@@ -100,7 +136,10 @@ const sampleListings = [
   {
     title: "Eco Friendly Lodge",
     desc: "Sustainable lodge with eco-friendly living.",
-    image: "https://example.com/images/eco-lodge.jpg",
+    image: {
+      url: "https://example.com/images/eco-lodge.jpg",
+      filename: "listing-13",
+    },
     price: 5500,
     location: "Coorg",
     country: "India",
@@ -108,7 +147,10 @@ const sampleListings = [
   {
     title: "Beach Hut Stay",
     desc: "Simple beach hut with direct access to the shore.",
-    image: "https://images.unsplash.com/photo-1605230521018-61f2095a762a?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1605230521018-61f2095a762a?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-14",
+    },
     price: 4000,
     location: "Varkala",
     country: "India",
@@ -116,7 +158,10 @@ const sampleListings = [
   {
     title: "Luxury Penthouse",
     desc: "High-rise penthouse with skyline views.",
-    image: "https://images.unsplash.com/photo-1702411200201-3061d0eea802?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1702411200201-3061d0eea802?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-15",
+    },
     price: 18000,
     location: "Bengaluru",
     country: "India",
@@ -124,7 +169,10 @@ const sampleListings = [
   {
     title: "Jungle Safari Lodge",
     desc: "Stay close to nature with guided jungle safaris.",
-    image: "https://images.unsplash.com/photo-1755448647983-529abcaa2c3e?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1755448647983-529abcaa2c3e?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-16",
+    },
     price: 9500,
     location: "Ranthambore",
     country: "India",
@@ -132,7 +180,10 @@ const sampleListings = [
   {
     title: "Spiritual Ashram Stay",
     desc: "Peaceful stay for meditation and yoga.",
-    image: "https://images.unsplash.com/photo-1726313017779-116885659165?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fFNwaXJpdHVhbCUyMEFzaHJhbSUyMFN0YXl8ZW58MHx8MHx8fDA%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1726313017779-116885659165?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fFNwaXJpdHVhbCUyMEFzaHJhbSUyMFN0YXl8ZW58MHx8MHx8fDA%3D",
+      filename: "listing-17",
+    },
     price: 3000,
     location: "Varanasi",
     country: "India",
@@ -140,7 +191,10 @@ const sampleListings = [
   {
     title: "Island Resort",
     desc: "Private island resort with crystal-clear waters.",
-    image: "https://images.unsplash.com/photo-1552873547-b88e7b2760e2?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1552873547-b88e7b2760e2?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-18",
+    },
     price: 25000,
     location: "Andaman",
     country: "India",
@@ -148,7 +202,10 @@ const sampleListings = [
   {
     title: "Colonial Bungalow",
     desc: "Old-style bungalow with colonial architecture.",
-    image: "https://images.unsplash.com/photo-1632152683081-28923830268d?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1632152683081-28923830268d?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-19",
+    },
     price: 8500,
     location: "Shimla",
     country: "India",
@@ -156,7 +213,10 @@ const sampleListings = [
   {
     title: "Farm Stay Retreat",
     desc: "Experience rural life with modern comfort.",
-    image: "https://plus.unsplash.com/premium_photo-1723928437874-db8c3a31cbee?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://plus.unsplash.com/premium_photo-1723928437874-db8c3a31cbee?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-20",
+    },
     price: 4500,
     location: "Nashik",
     country: "India",
@@ -164,7 +224,10 @@ const sampleListings = [
   {
     title: "Luxury Desert Resort",
     desc: "Premium desert resort with cultural shows.",
-    image: "https://images.unsplash.com/photo-1682879654288-3bc35430b79f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1682879654288-3bc35430b79f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-21",
+    },
     price: 16000,
     location: "Bikaner",
     country: "India",
@@ -172,7 +235,10 @@ const sampleListings = [
   {
     title: "Heritage Haveli",
     desc: "Traditional haveli with authentic Rajasthani décor.",
-    image: "https://plus.unsplash.com/premium_photo-1678916185493-781b5b61b93b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://plus.unsplash.com/premium_photo-1678916185493-781b5b61b93b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-22",
+    },
     price: 9000,
     location: "Mandawa",
     country: "India",
@@ -180,7 +246,10 @@ const sampleListings = [
   {
     title: "Seaside Guest House",
     desc: "Budget-friendly guest house near the beach.",
-    image: "https://plus.unsplash.com/premium_photo-1724701624517-22953482ce56?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://plus.unsplash.com/premium_photo-1724701624517-22953482ce56?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-23",
+    },
     price: 3500,
     location: "Pondicherry",
     country: "India",
@@ -188,7 +257,10 @@ const sampleListings = [
   {
     title: "Luxury Spa Resort",
     desc: "Wellness-focused resort with spa therapies.",
-    image: "https://images.unsplash.com/photo-1599875083042-33b9ee13eec2?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1599875083042-33b9ee13eec2?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-24",
+    },
     price: 17000,
     location: "Kerala",
     country: "India",
@@ -196,7 +268,10 @@ const sampleListings = [
   {
     title: "Modern Studio Apartment",
     desc: "Compact studio ideal for solo travelers.",
-    image: "https://images.unsplash.com/photo-1648775933902-f633de370964?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1648775933902-f633de370964?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-25",
+    },
     price: 5000,
     location: "Hyderabad",
     country: "India",
@@ -204,7 +279,10 @@ const sampleListings = [
   {
     title: "Cliffside Cottage",
     desc: "Cottage perched on a cliff with panoramic views.",
-    image: "https://media.istockphoto.com/id/610134478/photo/unpainted-boathouse.webp?a=1&b=1&s=612x612&w=0&k=20&c=ub68sQMxrHJ0E5Rsk1jtvvffu-mtI-hex1NlhWquUcY=",
+    image: {
+      url: "https://media.istockphoto.com/id/610134478/photo/unpainted-boathouse.webp?a=1&b=1&s=612x612&w=0&k=20&c=ub68sQMxrHJ0E5Rsk1jtvvffu-mtI-hex1NlhWquUcY=",
+      filename: "listing-26",
+    },
     price: 9500,
     location: "Lonavala",
     country: "India",
@@ -212,7 +290,10 @@ const sampleListings = [
   {
     title: "Luxury Golf Resort",
     desc: "Resort located beside a scenic golf course.",
-    image: "https://images.unsplash.com/photo-1733776721893-b7ba2f4e8763?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1733776721893-b7ba2f4e8763?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-27",
+    },
     price: 15500,
     location: "Gurgaon",
     country: "India",
@@ -220,7 +301,10 @@ const sampleListings = [
   {
     title: "Cultural Village Stay",
     desc: "Authentic village lifestyle experience.",
-    image: "https://images.unsplash.com/photo-1671080749770-791e382d681c?q=80&w=1176&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1671080749770-791e382d681c?q=80&w=1176&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-28",
+    },
     price: 4000,
     location: "Kutch",
     country: "India",
@@ -228,7 +312,10 @@ const sampleListings = [
   {
     title: "Skyline View Hotel",
     desc: "Hotel offering breathtaking city skyline views.",
-    image: "https://images.unsplash.com/photo-1688933758128-83d40ab10b4e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1688933758128-83d40ab10b4e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-29",
+    },
     price: 13000,
     location: "Pune",
     country: "India",
@@ -236,11 +323,14 @@ const sampleListings = [
   {
     title: "Luxury Waterfront Villa",
     desc: "Elegant villa with private waterfront access.",
-    image: "https://images.unsplash.com/photo-1763467941615-98eaad52f153?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      url: "https://images.unsplash.com/photo-1763467941615-98eaad52f153?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      filename: "listing-30",
+    },
     price: 22000,
     location: "Kumarakom",
     country: "India",
   },
 ];
 
-module.exports = {data: sampleListings};
+module.exports = { data: sampleListings };

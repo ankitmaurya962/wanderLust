@@ -12,6 +12,7 @@ const sampleListings = [
     location: "Goa",
     country: "India",
     geometry: { type: "Point", coordinates: [73.8278, 15.2993] },
+    category: "trending",
   },
   {
     title: "Mountain View Cottage",
@@ -24,6 +25,7 @@ const sampleListings = [
     location: "Manali",
     country: "India",
     geometry: { type: "Point", coordinates: [77.1892, 32.2396] },
+    category: "mountains",
   },
   {
     title: "City Center Apartment",
@@ -36,6 +38,7 @@ const sampleListings = [
     location: "Mumbai",
     country: "India",
     geometry: { type: "Point", coordinates: [72.8777, 19.076] },
+    category: "iconic",
   },
   {
     title: "Desert Camp Stay",
@@ -48,6 +51,7 @@ const sampleListings = [
     location: "Jaisalmer",
     country: "India",
     geometry: { type: "Point", coordinates: [70.9083, 26.9157] },
+    category: "desert",
   },
   {
     title: "Hilltop Resort",
@@ -60,6 +64,7 @@ const sampleListings = [
     location: "Ooty",
     country: "India",
     geometry: { type: "Point", coordinates: [76.695, 11.4102] },
+    category: "mountains",
   },
   {
     title: "Lake View Homestay",
@@ -72,6 +77,7 @@ const sampleListings = [
     location: "Udaipur",
     country: "India",
     geometry: { type: "Point", coordinates: [73.7125, 24.5854] },
+    category: "rooms",
   },
   {
     title: "Forest Tree House",
@@ -84,6 +90,7 @@ const sampleListings = [
     location: "Wayanad",
     country: "India",
     geometry: { type: "Point", coordinates: [76.132, 11.6854] },
+    category: "forest",
   },
   {
     title: "Royal Heritage Palace",
@@ -96,6 +103,7 @@ const sampleListings = [
     location: "Jaipur",
     country: "India",
     geometry: { type: "Point", coordinates: [75.7873, 26.9124] },
+    category: "castles",
   },
   {
     title: "Riverside Cottage",
@@ -108,6 +116,7 @@ const sampleListings = [
     location: "Rishikesh",
     country: "India",
     geometry: { type: "Point", coordinates: [78.2676, 30.0869] },
+    category: "rooms",
   },
   {
     title: "Luxury City Hotel",
@@ -120,6 +129,7 @@ const sampleListings = [
     location: "Delhi",
     country: "India",
     geometry: { type: "Point", coordinates: [77.209, 28.6139] },
+    category: "iconic",
   },
   {
     title: "Backwater Houseboat",
@@ -132,6 +142,7 @@ const sampleListings = [
     location: "Alleppey",
     country: "India",
     geometry: { type: "Point", coordinates: [76.3388, 9.4981] },
+    category: "boat",
   },
   {
     title: "Snow View Chalet",
@@ -144,18 +155,20 @@ const sampleListings = [
     location: "Gulmarg",
     country: "India",
     geometry: { type: "Point", coordinates: [74.3805, 34.0484] },
+    category: "arctic",
   },
   {
     title: "Eco Friendly Lodge",
     desc: "Sustainable lodge with eco-friendly living.",
     image: {
-      url: "https://example.com/images/eco-lodge.jpg",
+      url: "https://images.unsplash.com/photo-1582610116397-edb318620f90",
       filename: "listing-13",
     },
     price: 5500,
     location: "Coorg",
     country: "India",
     geometry: { type: "Point", coordinates: [75.8069, 12.3375] },
+    category: "forest",
   },
   {
     title: "Beach Hut Stay",
@@ -168,6 +181,7 @@ const sampleListings = [
     location: "Varkala",
     country: "India",
     geometry: { type: "Point", coordinates: [76.7163, 8.7379] },
+    category: "trending",
   },
   {
     title: "Luxury Penthouse",
@@ -180,6 +194,7 @@ const sampleListings = [
     location: "Bengaluru",
     country: "India",
     geometry: { type: "Point", coordinates: [77.5946, 12.9716] },
+    category: "iconic",
   },
   {
     title: "Jungle Safari Lodge",
@@ -192,6 +207,7 @@ const sampleListings = [
     location: "Ranthambore",
     country: "India",
     geometry: { type: "Point", coordinates: [76.5026, 26.0173] },
+    category: "forest",
   },
   {
     title: "Spiritual Ashram Stay",
@@ -204,6 +220,7 @@ const sampleListings = [
     location: "Varanasi",
     country: "India",
     geometry: { type: "Point", coordinates: [82.9739, 25.3176] },
+    category: "spiritual",
   },
   {
     title: "Island Resort",
@@ -216,6 +233,7 @@ const sampleListings = [
     location: "Andaman",
     country: "India",
     geometry: { type: "Point", coordinates: [92.7265, 11.7401] },
+    category: "trending",
   },
   {
     title: "Colonial Bungalow",
@@ -228,6 +246,7 @@ const sampleListings = [
     location: "Shimla",
     country: "India",
     geometry: { type: "Point", coordinates: [77.1734, 31.1048] },
+    category: "rooms",
   },
   {
     title: "Farm Stay Retreat",
@@ -240,6 +259,7 @@ const sampleListings = [
     location: "Nashik",
     country: "India",
     geometry: { type: "Point", coordinates: [73.7898, 19.9975] },
+    category: "farms",
   },
   {
     title: "Luxury Desert Resort",
@@ -252,6 +272,7 @@ const sampleListings = [
     location: "Bikaner",
     country: "India",
     geometry: { type: "Point", coordinates: [73.3119, 28.0229] },
+    category: "desert",
   },
   {
     title: "Heritage Haveli",
@@ -264,6 +285,7 @@ const sampleListings = [
     location: "Mandawa",
     country: "India",
     geometry: { type: "Point", coordinates: [75.1473, 28.0555] },
+    category: "castles",
   },
   {
     title: "Seaside Guest House",
@@ -276,6 +298,7 @@ const sampleListings = [
     location: "Pondicherry",
     country: "India",
     geometry: { type: "Point", coordinates: [79.8083, 11.9416] },
+    category: "rooms",
   },
   {
     title: "Luxury Spa Resort",
@@ -288,6 +311,7 @@ const sampleListings = [
     location: "Kerala",
     country: "India",
     geometry: { type: "Point", coordinates: [76.2711, 10.8505] },
+    category: "trending",
   },
   {
     title: "Modern Studio Apartment",
@@ -300,18 +324,20 @@ const sampleListings = [
     location: "Hyderabad",
     country: "India",
     geometry: { type: "Point", coordinates: [78.4867, 17.385] },
+    category: "rooms",
   },
   {
     title: "Cliffside Cottage",
     desc: "Cottage perched on a cliff with panoramic views.",
     image: {
-      url: "https://media.istockphoto.com/id/610134478/photo/unpainted-boathouse.webp",
+      url: "https://images.unsplash.com/photo-1689729738817-fb1f4256769d",
       filename: "listing-26",
     },
     price: 9500,
     location: "Lonavala",
     country: "India",
     geometry: { type: "Point", coordinates: [73.4062, 18.7546] },
+    category: "mountains",
   },
   {
     title: "Luxury Golf Resort",
@@ -324,6 +350,7 @@ const sampleListings = [
     location: "Gurgaon",
     country: "India",
     geometry: { type: "Point", coordinates: [77.0266, 28.4595] },
+    category: "trending",
   },
   {
     title: "Cultural Village Stay",
@@ -336,6 +363,7 @@ const sampleListings = [
     location: "Kutch",
     country: "India",
     geometry: { type: "Point", coordinates: [69.8597, 23.7337] },
+    category: "farms",
   },
   {
     title: "Skyline View Hotel",
@@ -348,6 +376,7 @@ const sampleListings = [
     location: "Pune",
     country: "India",
     geometry: { type: "Point", coordinates: [73.8567, 18.5204] },
+    category: "iconic",
   },
   {
     title: "Luxury Waterfront Villa",
@@ -360,6 +389,7 @@ const sampleListings = [
     location: "Kumarakom",
     country: "India",
     geometry: { type: "Point", coordinates: [76.4263, 9.6175] },
+    category: "trending",
   },
 ];
 

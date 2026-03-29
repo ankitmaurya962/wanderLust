@@ -1,4 +1,5 @@
 <% layout('layouts/boilerplate') -%>
+
 <body>
   <div class="row" id="row">
     <div class="col-8 offset-2">
@@ -8,77 +9,56 @@
       <form action="/listing/<%=list._id%>?_method=PATCH" method="Post" enctype="multipart/form-data">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
-          <input
-            class="form-control"
-            type="text"
-            name="title"
-            placeholder="title"
-            id="title"
-            value="<%=list.title%>"
-          />
+          <input class="form-control" type="text" name="title" placeholder="title" id="title" value="<%=list.title%>" />
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
-          <textarea
-            name="desc"
-            rows="5"
-            cols="20"
-            placeholder="Enter description"
-            id="description"
-            class="form-control"
-          >
+          <textarea name="desc" rows="5" cols="20" placeholder="Enter description" id="description" class="form-control">
           <%=list.desc%></textarea>
         </div>
         <div class="mb-3">
-          <img src="<%=modifiedUrl%>" class="edit-image">
+          <img src="<%=modifiedUrl%>" class="edit-image" />
         </div>
         <div class="mb-3">
           <label for="image" class="form-label">Upload Image </label>
-          <input
-            type="file"
-            name="image"
-            placeholder="image"
-            id="image"
-            class="form-control"
-          />
+          <input type="file" name="image" placeholder="image" id="image" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <select name="category" class="form-select" required>
+            <option value="">Select Category</option>
+            <option value="trending" <%= list.category === "trending" ? "selected" : "" %>>Trending</option>
+            <option value="rooms" <%= list.category === "rooms" ? "selected" : "" %>>Rooms</option>
+            <option value="iconic" <%= list.category === "iconic" ? "selected" : "" %>>Iconic Cities</option>
+            <option value="mountains" <%= list.category === "mountains" ? "selected" : "" %>>Mountains</option>
+            <option value="castles" <%= list.category === "castles" ? "selected" : "" %>>Castles</option>
+            <option value="pools" <%= list.category === "pools" ? "selected" : "" %>>Pools</option>
+            <option value="camping" <%= list.category === "camping" ? "selected" : "" %>>Camping</option>
+            <option value="farms" <%= list.category === "farms" ? "selected" : "" %>>Farms</option>
+            <option value="forest" <%= list.category === "forest" ? "selected" : "" %>>Forest</option>
+            <option value="arctic" <%= list.category === "arctic" ? "selected" : "" %>>Arctic</option>
+            <option value="boat" <%= list.category === "boat" ? "selected" : "" %>>Boat</option>
+            <option value="spiritual" <%= list.category === "spiritual" ? "selected" : "" %>>Spiritual</option>
+            <option value="desert" <%= list.category === "desert" ? "selected" : "" %>>Desert</option>
+          </select>
         </div>
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
               <label for="price" class="form-label">Price</label>
-              <input
-                type="number"
-                name="price"
-                placeholder="price"
-                value="<%=list.price%>"
-                class="form-control"
-              />
+              <input type="number" name="price" placeholder="price" value="<%=list.price%>" class="form-control" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
               <label for="country" class="form-label">Country</label>
-              <input
-                type="text"
-                name="country"
-                placeholder="country"
-                value="<%=list.country%>"
-                id="country"
-                class="form-control"
-              />
+              <input type="text" name="country" placeholder="country" value="<%=list.country%>" id="country" class="form-control" />
             </div>
           </div>
         </div>
         <div class="mb-3">
           <label for="location" class="form-label">Location</label>
-          <input
-            type="text"
-            name="location"
-            placeholder="location"
-            value="<%=list.location%>"
-            id="location"
-            class="form-control"
-          />
+          <input type="text" name="location" placeholder="location" value="<%=list.location%>" id="location" class="form-control" />
         </div>
         <div class="mb-3">
           <button class="btn btn-dark">Edit</button>

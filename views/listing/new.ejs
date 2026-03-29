@@ -2,10 +2,16 @@
 <body>
   <div class="row" id="row">
     <div class="col-8 offset-2">
-      <br>
+      <br />
       <h2>Add a new Hotel</h2>
-      <br>
-      <form method="post" action="/listing" class="needs-validation" novalidate enctype="multipart/form-data">
+      <br />
+      <form
+        method="post"
+        action="/listing"
+        class="needs-validation"
+        novalidate
+        enctype="multipart/form-data"
+      >
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -37,6 +43,26 @@
             id="image"
             class="form-control"
           />
+        </div>
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+
+          <select name="category" class="form-select" required>
+            <option value="">Select Category</option>
+            <option value="trending">Trending</option>
+            <option value="rooms">Rooms</option>
+            <option value="iconic">Iconic Cities</option>
+            <option value="mountains">Mountains</option>
+            <option value="castles">Castles</option>
+            <option value="pools">Pools</option>
+            <option value="camping">Camping</option>
+            <option value="farms">Farms</option>
+            <option value="forest">Forest</option>
+            <option value="arctic">Arctic</option>
+            <option value="boat">Boat</option>
+            <option value="spiritual">Spiritual</option>
+            <option value="desert">Desert</option>
+          </select>
         </div>
         <div class="row">
           <div class="col-md-6 mb-3">
@@ -72,7 +98,7 @@
           />
         </div>
         <div class="mb-3">
-          <button class="btn btn-dark" >Submit</button>
+          <button class="btn btn-dark">Submit</button>
         </div>
       </form>
     </div>

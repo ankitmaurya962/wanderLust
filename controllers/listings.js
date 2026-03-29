@@ -2,8 +2,13 @@ const Listing = require("../models/listing");
 const getCoordinates = require("../utils/geocoding"); 
 
 module.exports.index = async (req, res, next) => {
-  const AllList = await Listing.find({});
-  res.render("./listing/index.ejs", { AllList });
+  const { category } = req.query;
+  let filter = {};
+  if (category) {
+    filter.category = category;
+  }
+  const AllList = await Listing.find(filter);
+  res.render("./listing/index.ejs", { AllList, category });
 };
 
 module.exports.renderNewForm = (req, res) => {

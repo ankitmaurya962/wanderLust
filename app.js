@@ -69,12 +69,12 @@ app.use("/listing/:id", reviewRouter);
 app.use("/", userRouter);
 
 //home
-app.get(
-  "/",
-  wrapAsync(async (req, res, next) => {
-    res.send("home route");
-  }),
-);
+// app.get(
+//   "/",
+//   wrapAsync(async (req, res, next) => {
+//     res.send("home route");
+//   }),
+// );
 
 //if page is not found (if no route is found)
 app.use((req, res, next) => {

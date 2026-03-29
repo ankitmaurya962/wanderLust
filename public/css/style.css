@@ -22,6 +22,9 @@ body {
   padding: 0;
   margin: 0;
 }
+.card{
+  border: none !important;
+}
 .listing-card {
   border: none !important;
   box-shadow: none !important;

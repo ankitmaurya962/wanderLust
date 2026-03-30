@@ -1,18 +1,47 @@
+<style>
+.search-input{
+  border-radius: 25px;
+}
+.search-btn {
+  border-radius: 25px;
+  background-color: #ff385c;
+  border: none;
+  padding: 8px 16px;
+  color: white;
+}
+
+/* Hover */
+.search-btn:hover {
+  background-color: #e23252;
+}
+
+/* Focus (important) */
+.search-btn:focus {
+  background-color: #e23252;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Active click */
+.search-btn:active {
+  background-color: #e23252;
+  box-shadow: none;
+}
+</style>
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/"><i class="fa-regular fa-compass"></i></a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup"
-    >
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link" href="/listing">Explore</a>
       </div>
+      <form class="d-flex ms-auto" role="search">
+        <input class="form-control me-2 search-input" type="search" placeholder="Search" aria-label="Search" />
+        <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
       <div class="navbar-nav ms-auto">
         <a class="nav-link" href="/listing/new">Add New Listing</a>
         <%if(!currUser){%>

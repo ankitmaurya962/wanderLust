@@ -8,7 +8,7 @@ module.exports.index = async (req, res, next) => {
     filter.category = category;
   }
   const AllList = await Listing.find(filter);
-  res.render("./listing/index.ejs", { AllList, category });
+  res.render("./listing/index.ejs", { AllList });
 };
 
 module.exports.renderNewForm = (req, res) => {

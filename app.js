@@ -1,5 +1,4 @@
 require('dotenv').config() ;
-const axios = require("axios");
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -7,8 +6,8 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const CustomError = require("./utils/CustomError");
-const wrapAsync = require("./utils/wrapAsync");
 const session = require("express-session");
+const MongoStore = require("connect-mongo").default;
 const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
@@ -23,7 +22,22 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 
+const dbURL = process.env.ATLASDB_URL;
+
+const store = MongoStore.create({
+  mongoUrl: dbURL,
+  crypto:{
+    secret: "AnkitSecretKey"
+  },
+  touchAfter: 24*3600
+});
+
+store.on("error", ()=>{
+  console.log("Error in Mongo Session");
+})
+
 const sessionOption = {
+  store,
   secret: "AnkitSecretKey",
   resave: false,
   saveUninitialized: false,
@@ -35,17 +49,15 @@ const sessionOption = {
 };
 
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+  await mongoose.connect(dbURL);
 }
-
-const listingRouter = require("./routes/listing.js");
-const reviewRouter = require("./routes/review.js");
-const userRouter = require("./routes/user.js");
-
 main()
   .then(() => console.log("connected DB"))
   .catch((err) => console.log(err));
 
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
 
 app.use(session(sessionOption));
 app.use(flash());

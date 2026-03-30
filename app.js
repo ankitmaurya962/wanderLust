@@ -27,7 +27,7 @@ const dbURL = process.env.ATLASDB_URL;
 const store = MongoStore.create({
   mongoUrl: dbURL,
   crypto:{
-    secret: "AnkitSecretKey"
+    secret: process.env.SECRET
   },
   touchAfter: 24*3600
 });
@@ -38,7 +38,7 @@ store.on("error", ()=>{
 
 const sessionOption = {
   store,
-  secret: "AnkitSecretKey",
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {

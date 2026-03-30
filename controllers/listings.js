@@ -56,14 +56,16 @@ module.exports.renderEditForm = async (req, res, next) => {
 module.exports.edit = async (req, res, next) => {
   const { id } = req.params;
   const newList = req.body;
+  const geometry = await getCoordinates(req.body.location);
   const list = await Listing.findByIdAndUpdate(id, newList);
+  list.geometry = geometry;
   if (req.file) {
     const url = req.file.path;
     const filename = req.file.filename;
     list.image.url = url;
     list.image.filename = filename;
-    await list.save();
   }
+  await list.save();
   req.flash("success", "Lisiting updated!");
   res.redirect("/listing");
 };

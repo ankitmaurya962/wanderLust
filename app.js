@@ -12,6 +12,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
 const User = require("./models/user.js");
+const wrapAsync = require("./utils/wrapAsync.js")
 
 const app = express();
 app.set("view engine", "ejs");
@@ -81,12 +82,12 @@ app.use("/listing/:id", reviewRouter);
 app.use("/", userRouter);
 
 //home
-// app.get(
-//   "/",
-//   wrapAsync(async (req, res, next) => {
-//     res.send("home route");
-//   }),
-// );
+app.get(
+  "/",
+  wrapAsync(async (req, res, next) => {
+    res.render("listing/home"); // Renders views/listing/home.ejs
+  }),
+);
 
 //if page is not found (if no route is found)
 app.use((req, res, next) => {

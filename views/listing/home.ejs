@@ -1,0 +1,50 @@
+<% layout('layouts/boilerplate') -%>
+<style>
+  .hero {
+    background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; /* Travel-themed background image */
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay for text readability */
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+  .explore-btn {
+    background-color: #ff385c;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border-radius: 25px;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+  .explore-btn:hover {
+    background-color: #e23252;
+    color: white;
+    text-decoration: none;
+  }
+</style>
+
+<div class="hero">
+  <div class="hero-content">
+    <h1>Welcome to WanderLust</h1>
+    <p>Discover your next adventure</p>
+    <a href="/listing" class="explore-btn">Explore</a> <!-- Redirects to /listing (index.ejs) -->
+  </div>
+</div>

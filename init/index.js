@@ -1,13 +1,15 @@
+require("dotenv").config({ path: "../.env" });
+
 const mongoose = require("mongoose");
 const Listing = require("../models/listing");
 const sampledatas = require("./data");
 
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+  await mongoose.connect(process.env.ATLASDB_URL);
 }
 
 main()
-  .then(console.log("connected db Successfully"))
+  .then(() => console.log("connected db Successfully"))
   .catch((err) => console.log(err));
 
 async function initDb() {

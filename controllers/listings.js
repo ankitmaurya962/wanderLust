@@ -2,10 +2,13 @@ const Listing = require("../models/listing");
 const getCoordinates = require("../utils/geocoding"); 
 
 module.exports.index = async (req, res, next) => {
-  const { category } = req.query;
+  const { category, place } = req.query;
   let filter = {};
   if (category) {
     filter.category = category;
+  }
+  if(place){
+    filter.location = {$regex: place, $options: 'i'};
   }
   const AllList = await Listing.find(filter);
   res.render("./listing/index.ejs", { AllList });

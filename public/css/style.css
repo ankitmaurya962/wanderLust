@@ -1,6 +1,13 @@
-body {
+html, body {
   font-family: "plus Jakarta", sans-serif !important;
   min-height: 100vh;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+.content {
+  flex: 1;
 }
 .navbar {
   background-color: white;
@@ -69,10 +76,9 @@ body {
   background-color: #f7f7f7;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   height: 10rem;
-  top: 0;
 }
 .footer i {
   font-size: 1.5rem;

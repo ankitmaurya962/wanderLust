@@ -123,7 +123,7 @@
     <a href="/listing/<%= list._id %>" style="text-decoration: none;">
 
       <div class="card">
-        <img src="<%= list.image.url %>" class="card-img-top" style="height:20rem; object-fit:cover;">
+        <img src="<%= list.image.url.replace('/upload', '/upload/q_auto:low,w_400,h_250,c_fill') %>" class="card-img-top" style="height:20rem; object-fit:cover;">
 
         <div class="card-img-overlay"></div>
 

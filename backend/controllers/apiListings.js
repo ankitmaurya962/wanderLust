@@ -1,0 +1,81 @@
+const Listing = require("../models/listing");
+const getCoordinates = require("../utils/geocoding"); 
+
+module.exports.index = async (req, res, next) => {
+  const { category, place } = req.query;
+  let filter = {};
+  if (category) {
+    filter.category = category;
+  }
+  if(place){
+    filter.location = {$regex: place, $options: 'i'};
+  }
+  const AllList = await Listing.find(filter);
+  res.json(AllList);
+};
+
+module.exports.renderNewForm = (req, res) => {
+  res.render("listing/new");
+};
+
+module.exports.newListing = async (req, res, next) => {
+  const list = new Listing(req.body);
+  list.owner = req.user._id;
+  let url = req.file.path;
+  let filename = req.file.filename;
+  list.image = { url, filename };
+  //coordinates
+  const geometry = await getCoordinates(req.body.location);
+  list.geometry = geometry;
+  await list.save();
+  req.flash("success", "new listing added");
+  res.redirect("./listing");
+};
+
+module.exports.show = async (req, res, next) => {
+  const { id } = req.params;
+  const data = await Listing.findById(id)
+    .populate({ path: "reviews", populate: { path: "author" } })
+    .populate("owner");
+  if (!data) {
+    req.flash("error", "Listing does not exists !");
+    return res.redirect("/listing");
+  }
+  res.json(data);
+};
+
+module.exports.renderEditForm = async (req, res, next) => {
+  const { id } = req.params;
+  const list = await Listing.findById(id);
+  if (!list) {
+    req.flash("error", "Listing does not exists !");
+    return res.redirect("/listing");
+  }
+  const originalUrl = list.image.url;
+  const modifiedUrl = originalUrl.replace("/upload", "/upload/h_150,w_200");
+  res.render("./listing/edit", { list, modifiedUrl});
+};
+
+module.exports.edit = async (req, res, next) => {
+  const { id } = req.params;
+  const newList = req.body;
+  const geometry = await getCoordinates(req.body.location);
+  const list = await Listing.findByIdAndUpdate(id, newList);
+  list.geometry = geometry;
+  if (req.file) {
+    const url = req.file.path;
+    const filename = req.file.filename;
+    list.image.url = url;
+    list.image.filename = filename;
+  }
+  await list.save();
+  req.flash("success", "Lisiting updated!");
+  res.redirect("/listing");
+};
+
+module.exports.delete = async (req, res, next) => {
+  const { id } = req.params;
+  await Listing.findByIdAndDelete(id);
+  req.flash("success", "Lisiting Deleted!");
+  res.redirect("/listing");
+};

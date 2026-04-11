@@ -1,16 +1,23 @@
-import React from 'react'
-import Index from './pages/Index'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
+import React from "react";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Index from "./pages/Index";
+import Show from "./pages/Show";
+
+import { Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
-    <div>
-      <Navbar></Navbar>
-      <Index></Index>
-      <Footer></Footer>
-    </div>
-  )
-}
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/listings/:id" element={<Show />} />
+      </Routes>
 
-export default App
+      <Footer />
+    </>
+  );
+};
+
+export default App;

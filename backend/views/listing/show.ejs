@@ -71,9 +71,11 @@
                 <p class="card-text"><%=review.comments%></p>
                 <p class="starability-result" data-rating="<%=review.rating%>"></p>
               </div>
+              <% if(currUser && currUser._id.equals(review.author._id)) { %>
               <form action="/listing/<%=data._id%>/reviews/<%=review._id%>?_method=DELETE" method="post">
-                <button class="btn btn-sm btn-dark mb-3 ms-3"> Delete</button>
+                <button class="btn btn-sm btn-dark mb-3 ms-3">Delete</button>
               </form>
+              <% } %>
             </div>
             <%} %>
           </div>
@@ -87,7 +89,6 @@
               lng: <%= data.geometry.coordinates[0] %>,
               title: "<%= data.title %>"
             };
-          </script>
           </script>
           <script src="/js/map.js" defer></script>
         </div>

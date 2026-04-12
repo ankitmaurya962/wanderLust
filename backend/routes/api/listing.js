@@ -2,9 +2,15 @@ const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../../utils/wrapAsync")
 const apiListingController = require("../../controllers/apiListings");
+const {isLoggedIn, validate} = require("../../middleware")
 
-// GET all listings
-router.get("/", wrapAsync(apiListingController.index));
+
+router
+  .route("/")
+  .get(
+    wrapAsync(apiListingController.index), //index route
+  )
+  .post(isLoggedIn, validate, wrapAsync(apiListingController.newListing)); //create
 
 // GET single listing
 router.get("/:id", wrapAsync(apiListingController.show));

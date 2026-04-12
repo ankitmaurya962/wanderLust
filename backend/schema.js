@@ -5,7 +5,7 @@ module.exports.listingSchema = Joi.object({
   desc: Joi.string().required(),
   location: Joi.string().required(),
   country: Joi.string().required(),
-  price: Joi.string().min(0).required(),
+  price: Joi.number().min(0).required(),
   image: Joi.string().allow("", null),
   category: Joi.string()
     .valid(
@@ -19,7 +19,7 @@ module.exports.listingSchema = Joi.object({
       "farms",
       "arctic",
       "boat",
-      "spirtual",
+      "spiritual",
       "forest",
       "desert",
     )

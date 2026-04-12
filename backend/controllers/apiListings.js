@@ -63,10 +63,7 @@ module.exports.show = async (req, res, next) => {
       });
     }
 
-    res.json({
-      success: true,
-      data,
-    });
+    res.json(data);
   } catch (err) {
     next(err);
   }

@@ -12,7 +12,11 @@ router
   )
   .post(isLoggedIn, validate, wrapAsync(apiListingController.newListing)); //create
 
-// GET single listing
-router.get("/:id", wrapAsync(apiListingController.show));
+
+router
+  .route("/:id")
+  .get(wrapAsync(apiListingController.show))
+  .patch(isLoggedIn, validate, wrapAsync(apiListingController.edit))
+  .delete(isLoggedIn, wrapAsync(apiListingController.delete));
 
 module.exports = router;

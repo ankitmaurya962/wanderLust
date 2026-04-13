@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ListingCard from "../components/ListingCard";
 
 const Index = () => {
@@ -10,10 +10,25 @@ const Index = () => {
 
   const navigate = useNavigate();
 
+  // ✅ get query from URL
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const place = queryParams.get("place");
+  const category = queryParams.get("category"); // (future use)
+
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const res = await axios.get("/api/listings");
+        setLoading(true);
+
+        const res = await axios.get("/api/listings", {
+          params: {
+            place,
+            category,
+          },
+        });
+
         setListings(res.data);
       } catch (err) {
         console.error(err);
@@ -24,7 +39,7 @@ const Index = () => {
     };
 
     fetchListings();
-  }, []);
+  }, [place, category]); 
 
   // 🔹 Loading UI
   if (loading) {
@@ -38,18 +53,22 @@ const Index = () => {
 
   return (
     <div className="px-6 md:px-12 py-6">
-      {/* Heading */}
-      <h1 className="text-3xl font-semibold mb-6">WanderLust</h1>
-
+      
       {/* Listings Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {listings.map((list) => (
-          <ListingCard
-            key={list._id}
-            list={list}
-            onClick={() => navigate(`/listings/${list._id}`)}
-          />
-        ))}
+        {listings.length > 0 ? (
+          listings.map((list) => (
+            <ListingCard
+              key={list._id}
+              list={list}
+              onClick={() => navigate(`/listings/${list._id}`)}
+            />
+          ))
+        ) : (
+          <p className="col-span-full text-center text-gray-500">
+            No listings found
+          </p>
+        )}
       </div>
     </div>
   );

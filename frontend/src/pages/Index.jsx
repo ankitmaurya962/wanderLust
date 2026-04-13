@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import ListingCard from "../components/ListingCard";
+import CategoryBar from "../components/CategoryBar";
 
 const Index = () => {
   const [listings, setListings] = useState([]);
@@ -54,6 +55,8 @@ const Index = () => {
   return (
     <div className="px-6 md:px-12 py-6">
       
+      {/* categorybar */}
+      <CategoryBar></CategoryBar>
       {/* Listings Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {listings.length > 0 ? (

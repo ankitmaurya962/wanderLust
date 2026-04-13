@@ -14,7 +14,7 @@ import {
   FaPray,
   FaSun,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const categories = [
   { name: "trending", icon: <FaFire /> },
@@ -33,23 +33,40 @@ const categories = [
 ];
 
 const CategoryBar = () => {
-
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const place = queryParams.get("place");
 
   return (
-    <div>
-      <div className="flex gap-6 mb-6">
-        {categories.map((cat) => (
-          <div
-            onClick={()=>navigate(`/listings?category=${cat.name}`)}
-            key={cat.name}
-            className="flex flex-col items-center cursor-pointer hover:scale-110 transition"
-          >
-            <div className="text-xl">{cat.icon}</div>
-            <p className="text-sm">{cat.name}</p>
-          </div>
-        ))}
+    <div className="flex gap-6 overflow-x-auto px-4 py-2">
+
+      {/* ALL BUTTON */}
+      <div
+        onClick={() => navigate("/listings")}
+        className="flex flex-col items-center cursor-pointer hover:scale-110 transition"
+      >
+        <p className="text-sm">All</p>
       </div>
+
+      {/* CATEGORIES */}
+      {categories.map((cat) => (
+        <div
+          key={cat.name}
+          onClick={() =>
+            navigate(
+              `/listings?category=${cat.name}${
+                place ? `&place=${place}` : ""
+              }`
+            )
+          }
+          className="flex flex-col items-center cursor-pointer hover:scale-110 transition"
+        >
+          <div className="text-xl">{cat.icon}</div>
+          <p className="text-sm">{cat.name}</p>
+        </div>
+      ))}
     </div>
   );
 };

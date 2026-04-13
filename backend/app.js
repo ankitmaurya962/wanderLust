@@ -83,6 +83,7 @@ app.use("/listing", listingRouter);
 app.use("/api/listings", apiListingRouter);
 app.use("/listing/:id", reviewRouter);
 app.use("/", userRouter);
+app.use("/api", userRouter);
 
 //home
 app.get(

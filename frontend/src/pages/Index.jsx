@@ -11,7 +11,6 @@ const Index = () => {
 
   const navigate = useNavigate();
 
-  // ✅ get query from URL
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
@@ -59,6 +58,7 @@ const Index = () => {
       <CategoryBar></CategoryBar>
       {/* Listings Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        
         {listings.length > 0 ? (
           listings.map((list) => (
             <ListingCard

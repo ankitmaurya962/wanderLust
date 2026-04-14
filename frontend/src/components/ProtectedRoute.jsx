@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
@@ -12,7 +13,7 @@ const ProtectedRoute = ({ children }) => {
     return (
       <Navigate
         to="/signin"
-        state={{ from: location.pathname }}
+        state={{ from: location.pathname, message: "Please login first 🔒" }}
         replace
       />
     );

@@ -10,12 +10,13 @@ import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   return (
     <>
       <Navbar />
-
+      <Toaster position="top-center" />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/listings" element={<Index />} />

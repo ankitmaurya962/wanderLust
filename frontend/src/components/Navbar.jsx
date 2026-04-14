@@ -3,13 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import toast from "react-hot-toast"; // ✅ added
 
 const Navbar = () => {
   const [place, setPlace] = useState("");
   const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // 🔍 search
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!place.trim()) return;
@@ -17,14 +17,22 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
+    const toastId = toast.loading("Logging out..."); // ✅ added
+
     try {
       await axios.get("/api/logout", {
         withCredentials: true,
       });
-      setUser(null); // update UI
+
+      setUser(null);
+
+      toast.success("Logged out successfully 👋", { id: toastId }); // ✅ added
+
       navigate("/");
     } catch (err) {
+      toast.dismiss(toastId); // ✅ added
       console.log(err);
+      // ❌ no toast.error (handled by interceptor)
     }
   };
 

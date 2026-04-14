@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { AuthContext } from "../context/AuthContext";
 
 const Edit = () => {
+  const { user } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -22,9 +25,19 @@ const Edit = () => {
   // 🔹 Fetch existing listing
   useEffect(() => {
     const fetchListing = async () => {
+      const toastId = toast.loading("Fetching listing...");
+
       try {
         const res = await axios.get(`/api/listings/${id}`);
         const data = res.data.data || res.data;
+
+        // 🔐 OWNER CHECK (🔥 main fix)
+        if (user && user._id !== data.owner?._id) {
+          toast.dismiss(toastId);
+          toast.error("You are not authorized ❌");
+          navigate("/listings");
+          return;
+        }
 
         setForm({
           title: data.title || "",
@@ -35,7 +48,10 @@ const Edit = () => {
           category: data.category || "",
           image: data.image?.url || "",
         });
+
+        toast.dismiss(toastId);
       } catch (err) {
+        toast.dismiss(toastId);
         console.error(err);
         setError("Failed to load listing");
       } finally {
@@ -44,7 +60,7 @@ const Edit = () => {
     };
 
     fetchListing();
-  }, [id]);
+  }, [id, user, navigate]);
 
   // 🔹 Handle input change
   const handleChange = (e) => {
@@ -58,23 +74,27 @@ const Edit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ Extra validation
     if (form.price <= 0) {
-      alert("Price must be greater than 0");
+      toast.error("Price must be greater than 0");
       return;
     }
 
     if (!form.category) {
-      alert("Please select a category");
+      toast.error("Please select a category");
       return;
     }
 
+    const toastId = toast.loading("Updating listing...");
+
     try {
       await axios.patch(`/api/listings/${id}`, form);
+
+      toast.success("Listing updated successfully ✨", { id: toastId });
+
       navigate(`/listings/${id}`);
     } catch (err) {
+      toast.dismiss(toastId);
       console.error(err);
-      alert("Error updating listing");
     }
   };
 
@@ -87,7 +107,6 @@ const Edit = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
 
-        {/* Title */}
         <input
           type="text"
           name="title"
@@ -98,7 +117,6 @@ const Edit = () => {
           required
         />
 
-        {/* Description */}
         <textarea
           name="desc"
           value={form.desc}
@@ -108,7 +126,6 @@ const Edit = () => {
           required
         />
 
-        {/* Image URL */}
         <input
           type="text"
           name="image"
@@ -119,7 +136,6 @@ const Edit = () => {
           required
         />
 
-        {/* Preview */}
         {form.image && (
           <img
             src={form.image}
@@ -128,7 +144,6 @@ const Edit = () => {
           />
         )}
 
-        {/* Category */}
         <select
           name="category"
           value={form.category}
@@ -152,7 +167,6 @@ const Edit = () => {
           <option value="desert">Desert</option>
         </select>
 
-        {/* Price + Country */}
         <div className="grid grid-cols-2 gap-4">
           <input
             type="number"
@@ -174,7 +188,6 @@ const Edit = () => {
           />
         </div>
 
-        {/* Location */}
         <input
           type="text"
           name="location"
@@ -185,7 +198,6 @@ const Edit = () => {
           required
         />
 
-        {/* Submit */}
         <button className="bg-black text-white px-4 py-2 rounded">
           Update Listing
         </button>

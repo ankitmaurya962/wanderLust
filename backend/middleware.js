@@ -1,65 +1,130 @@
 const Listing = require("./models/listing");
-const { listingSchema } = require("./schema");
+const { listingSchema, reviewSchema } = require("./schema");
 const CustomError = require("./utils/CustomError");
-const { reviewSchema } = require("./schema");
 const Review = require("./models/review");
 
+// 🔥 Helper: detect API request
+const isApiRequest = (req) => req.originalUrl.startsWith("/api");
+
+// =============================
+// 🔐 AUTH CHECK
+// =============================
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
+
+    // 👉 React / API
+    if (isApiRequest(req)) {
+      return res.status(401).json({
+        success: false,
+        message: "You must login first",
+      });
+    }
+
+    // 👉 EJS (existing site)
     req.session.redirectUrl = req.originalUrl;
     req.flash("error", "You must login first!");
     return res.redirect("/signin");
   }
+
   next();
 };
 
+// =============================
+// 🔁 SAVE REDIRECT (EJS only)
+// =============================
 module.exports.saveRedirectUrl = (req, res, next) => {
-  if (req.session.redirectUrl) {
+  if (!isApiRequest(req) && req.session.redirectUrl) {
     res.locals.redirectUrl = req.session.redirectUrl;
   }
   next();
 };
 
+// =============================
+// 👤 OWNER CHECK
+// =============================
 module.exports.isOwner = async (req, res, next) => {
   const { id } = req.params;
   const list = await Listing.findById(id);
-  if (res.locals.currUser && !list.owner._id.equals(res.locals.currUser._id)) {
-    req.flash("error", "you are not owner of listing");
+
+  if (!req.user || !list.owner._id.equals(req.user._id)) {
+
+    if (isApiRequest(req)) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not owner of this listing",
+      });
+    }
+
+    req.flash("error", "You are not owner of listing");
     return res.redirect(`/listing/${id}`);
   }
+
   next();
 };
 
+// =============================
+// ✍️ REVIEW AUTHOR CHECK
+// =============================
 module.exports.isAuthor = async (req, res, next) => {
   const { id, ReviewId } = req.params;
-  const review= await Review.findById(ReviewId);
-  const reviewAuthor = review.author;
-  if (res.locals.currUser && !reviewAuthor.equals(res.locals.currUser._id)) {
-    req.flash("error", "you cannot edit others review");
+  const review = await Review.findById(ReviewId);
+
+  if (!req.user || !review.author.equals(req.user._id)) {
+
+    if (isApiRequest(req)) {
+      return res.status(403).json({
+        success: false,
+        message: "You cannot edit others review",
+      });
+    }
+
+    req.flash("error", "You cannot edit others review");
     return res.redirect(`/listing/${id}`);
   }
+
   next();
 };
 
-//validation for listing
+// =============================
+// ✅ LISTING VALIDATION
+// =============================
 module.exports.validate = (req, res, next) => {
-  let { error } = listingSchema.validate(req.body);
+  const { error } = listingSchema.validate(req.body);
+
   if (error) {
-    let errMsg = error.details.map((el) => el.message).join(",");
+    const errMsg = error.details.map((el) => el.message).join(",");
+
+    if (isApiRequest(req)) {
+      return res.status(400).json({
+        success: false,
+        message: errMsg,
+      });
+    }
+
     throw new CustomError(400, errMsg);
-  } else {
-    next();
   }
+
+  next();
 };
 
-//review validation
+// =============================
+// ✅ REVIEW VALIDATION
+// =============================
 module.exports.reviewValidate = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
 
   if (error) {
     const errMsg = error.details.map((el) => el.message).join(",");
+
+    if (isApiRequest(req)) {
+      return res.status(400).json({
+        success: false,
+        message: errMsg,
+      });
+    }
+
     throw new CustomError(400, errMsg);
-  } else {
-    next();
   }
+
+  next();
 };

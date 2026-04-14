@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast"; // ✅ added
 
 const New = () => {
   const navigate = useNavigate();
@@ -29,6 +30,8 @@ const New = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const toastId = toast.loading("Creating listing..."); // ✅ added
+
     try {
       setLoading(true);
 
@@ -41,10 +44,13 @@ const New = () => {
 
       console.log(res.data);
 
-      navigate("/listings"); // go to listings page
+      toast.success("Listing created successfully 🎉", { id: toastId }); // ✅ added
+
+      navigate("/listings");
     } catch (err) {
+      toast.dismiss(toastId); // ✅ added
       console.error(err.response?.data || err.message);
-      alert("Error creating listing");
+      // ❌ removed alert (interceptor will handle error)
     } finally {
       setLoading(false);
     }
@@ -110,7 +116,6 @@ const New = () => {
           className="w-full border p-2 rounded"
         />
 
-        {/* ✅ CATEGORY DROPDOWN */}
         <select
           name="category"
           value={form.category}

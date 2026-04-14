@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import ListingCard from "../components/ListingCard";
 import CategoryBar from "../components/CategoryBar";
+import toast from "react-hot-toast"; // ✅ added
 
 const Index = () => {
   const [listings, setListings] = useState([]);
@@ -15,10 +16,12 @@ const Index = () => {
   const queryParams = new URLSearchParams(location.search);
 
   const place = queryParams.get("place");
-  const category = queryParams.get("category"); // (future use)
+  const category = queryParams.get("category");
 
   useEffect(() => {
     const fetchListings = async () => {
+      const toastId = toast.loading("Fetching listings..."); // ✅ added
+
       try {
         setLoading(true);
 
@@ -30,35 +33,34 @@ const Index = () => {
         });
 
         setListings(res.data);
+
+        toast.dismiss(toastId); // ✅ added
       } catch (err) {
+        toast.dismiss(toastId); // ✅ added
         console.error(err);
         setError("Failed to load listings");
+        // ❌ no toast.error (handled by interceptor)
       } finally {
         setLoading(false);
       }
     };
 
     fetchListings();
-  }, [place, category]); 
+  }, [place, category]);
 
-  // 🔹 Loading UI
   if (loading) {
     return <h2 className="text-center mt-10 text-lg">Loading...</h2>;
   }
 
-  // 🔹 Error UI
   if (error) {
     return <h2 className="text-center mt-10 text-red-500">{error}</h2>;
   }
 
   return (
     <div className="px-6 md:px-12 py-6">
-      
-      {/* categorybar */}
-      <CategoryBar></CategoryBar>
-      {/* Listings Grid */}
+      <CategoryBar />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        
         {listings.length > 0 ? (
           listings.map((list) => (
             <ListingCard

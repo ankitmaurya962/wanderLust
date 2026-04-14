@@ -15,7 +15,7 @@ const Signin = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from || "/";
+  const from = location.state?.from || "/listings";
 
   const submitHandler = async (e) => {
     e.preventDefault();

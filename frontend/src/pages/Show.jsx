@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import toast from "react-hot-toast"; // ✅ added
 
 const Show = () => {
   const { id } = useParams();
@@ -36,12 +37,16 @@ const Show = () => {
     fetchListing();
   }, [id]);
 
-  // 🔹 Delete listing (no auth check)
+  // 🔹 Delete listing
   const handleDeleteListing = async () => {
+    const toastId = toast.loading("Deleting listing..."); // ✅
+
     try {
       await axios.delete(`/api/listings/${id}`);
+      toast.success("Listing deleted 🗑️", { id: toastId });
       navigate("/");
     } catch (err) {
+      toast.dismiss(toastId);
       console.error(err);
     }
   };
@@ -50,11 +55,17 @@ const Show = () => {
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
 
+    const toastId = toast.loading("Adding review..."); // ✅
+
     try {
       await axios.post(`/api/listings/${id}/reviews`, {
-        rating,
-        comments: comment,
+        review: {
+          rating,
+          comments: comment,
+        },
       });
+
+      toast.success("Review added successfully 🎉", { id: toastId });
 
       // Refresh listing
       const res = await axios.get(`/api/listings/${id}`);
@@ -63,22 +74,25 @@ const Show = () => {
       setRating(1);
       setComment("");
     } catch (err) {
-      console.error(err);
+      toast.dismiss(toastId);
     }
   };
 
   // 🔹 Delete review
   const handleDeleteReview = async (reviewId) => {
+    const toastId = toast.loading("Deleting review..."); // ✅
+
     try {
       await axios.delete(`/api/listings/${id}/reviews/${reviewId}`);
 
-      // Update UI without refetch
+      toast.success("Review deleted 🗑️", { id: toastId });
+
       setListing((prev) => ({
         ...prev,
         reviews: prev.reviews.filter((r) => r._id !== reviewId),
       }));
     } catch (err) {
-      console.error(err);
+      toast.dismiss(toastId);
     }
   };
 
@@ -90,32 +104,25 @@ const Show = () => {
   return (
     <div className="px-6 md:px-12 py-6">
       <div className="max-w-4xl mx-auto">
-        {/* Title */}
         <h2 className="text-3xl font-semibold mb-4">{listing.title}</h2>
 
-        {/* Image */}
         <img
           src={listing.image?.url || "https://via.placeholder.com/400"}
           alt="listing"
           className="w-full h-[400px] object-cover rounded-xl"
         />
 
-        {/* Info */}
         <div className="mt-4 space-y-2">
           <p className="font-semibold">{listing.owner?.username}</p>
-
           <p>{listing.desc}</p>
-
           <p>
             {listing.location}, {listing.country}
           </p>
-
           <p className="text-xl font-semibold">
             ₹{listing.price?.toLocaleString("en-IN")}
           </p>
         </div>
 
-        {/* Buttons */}
         <div className="flex gap-4 mt-4">
           {user?._id === listing.owner?._id && (
             <>
@@ -138,7 +145,6 @@ const Show = () => {
 
         <hr className="my-6" />
 
-        {/* 🔹 Review Form */}
         <h4 className="text-xl font-semibold mb-2">Leave a Review</h4>
 
         <form onSubmit={handleReviewSubmit} className="space-y-4">
@@ -172,7 +178,6 @@ const Show = () => {
 
         <hr className="my-6" />
 
-        {/* 🔹 Reviews */}
         {listing.reviews?.length > 0 && (
           <>
             <h4 className="text-xl font-semibold mb-4">All Reviews</h4>
@@ -181,17 +186,17 @@ const Show = () => {
               {listing.reviews.map((review) => (
                 <div key={review._id} className="border p-4 rounded shadow">
                   <h5 className="font-semibold">{review.author?.username}</h5>
-
                   <p>{review.comments}</p>
-
                   <p>⭐ {review.rating}</p>
 
-                  <button
-                    onClick={() => handleDeleteReview(review._id)}
-                    className="mt-2 text-sm bg-black text-white px-2 py-1 rounded"
-                  >
-                    Delete
-                  </button>
+                  {user?._id === review.author?._id && (
+                    <button
+                      onClick={() => handleDeleteReview(review._id)}
+                      className="mt-2 text-sm bg-black text-white px-2 py-1 rounded"
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -200,7 +205,6 @@ const Show = () => {
 
         <hr className="my-6" />
 
-        {/* Map */}
         <h4 className="text-xl font-semibold mb-2">Location</h4>
 
         <div className="h-[300px] bg-gray-200 flex items-center justify-center rounded">

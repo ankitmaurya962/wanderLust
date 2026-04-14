@@ -21,16 +21,19 @@ module.exports.newListing = async (req, res, next) => {
     const list = new Listing({
       title: req.body.title,
       desc: req.body.desc,
-      price: Number(req.body.price), 
+      price: Number(req.body.price),
       location: req.body.location,
       country: req.body.country,
-      category: req.body.category, 
+      category: req.body.category,
       geometry,
-      image: {
-        url: req.body.image,
-        filename: "custom",
-      },
     });
+
+    if (req.file) {
+      list.image = {
+        url: req.file.path,        // Cloudinary URL
+        filename: req.file.filename, //Cloudinary filename
+      };
+    }
 
     if (req.user) {
       list.owner = req.user._id;
@@ -73,8 +76,13 @@ module.exports.edit = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const geometry = await getCoordinates(req.body.location);
+    // ✅ Only geocode if location is provided & not empty
+    let geometry;
+    if (req.body.location && req.body.location.trim() !== "") {
+      geometry = await getCoordinates(req.body.location);
+    }
 
+    // ✅ Prepare update object (clean + flexible)
     const updatedData = {
       title: req.body.title,
       desc: req.body.desc,
@@ -82,17 +90,19 @@ module.exports.edit = async (req, res, next) => {
       location: req.body.location,
       country: req.body.country,
       category: req.body.category,
-      geometry,
-      image: {
-        url: req.body.image,
-        filename: "custom",
-      },
     };
 
+    // ✅ Add geometry only if it exists
+    if (geometry) {
+      updatedData.geometry = geometry;
+    }
+
+    // ✅ Update listing
     const list = await Listing.findByIdAndUpdate(id, updatedData, {
       new: true,
     });
 
+    // ❌ If not found
     if (!list) {
       return res.status(404).json({
         success: false,
@@ -100,11 +110,21 @@ module.exports.edit = async (req, res, next) => {
       });
     }
 
+    // ✅ Handle image update properly
+    if (req.file) {
+      list.image = {
+        url: req.file.path,
+        filename: req.file.filename,
+      };
+      await list.save(); // 🔥 MUST save after modifying image
+    }
+
     res.json({
       success: true,
       message: "Listing updated",
       data: list,
     });
+
   } catch (err) {
     next(err);
   }

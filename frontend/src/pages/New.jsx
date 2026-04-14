@@ -6,6 +6,8 @@ import toast from "react-hot-toast"; // ✅ added
 const New = () => {
   const navigate = useNavigate();
 
+  const [file, setFile] = useState(null);
+
   const [form, setForm] = useState({
     title: "",
     price: "",
@@ -13,7 +15,7 @@ const New = () => {
     country: "",
     desc: "",
     image: "",
-    category: "", 
+    category: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -35,12 +37,17 @@ const New = () => {
     try {
       setLoading(true);
 
-      const payload = {
-        ...form,
-        price: Number(form.price),
-      };
+      const formData = new FormData();
 
-      const res = await axios.post("/api/listings", payload);
+      formData.append("title", form.title);
+      formData.append("price", Number(form.price));
+      formData.append("location", form.location);
+      formData.append("country", form.country);
+      formData.append("desc", form.desc);
+      formData.append("category", form.category);
+      formData.append("image", file);
+
+      const res = await axios.post("/api/listings", formData);
 
       console.log(res.data);
 
@@ -58,12 +65,9 @@ const New = () => {
 
   return (
     <div className="px-6 md:px-12 py-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-4">
-        Create New Listing
-      </h1>
+      <h1 className="text-2xl font-semibold mb-4">Create New Listing</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-
         <input
           name="title"
           placeholder="Title"
@@ -101,10 +105,9 @@ const New = () => {
         />
 
         <input
-          name="image"
-          placeholder="Image URL"
-          value={form.image}
-          onChange={handleChange}
+          type="file"
+          accept="image/*"
+          onChange={(e) => setFile(e.target.files[0])}
           className="w-full border p-2 rounded"
         />
 

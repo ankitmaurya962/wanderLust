@@ -69,8 +69,11 @@ module.exports.isAuthor = async (req, res, next) => {
   const { id, ReviewId } = req.params;
   const review = await Review.findById(ReviewId);
 
-  if (!req.user || !review.author.equals(req.user._id)) {
-
+  // 🔐 safe comparison
+  if (
+    !req.user ||
+    review.author.toString() !== req.user._id.toString()
+  ) {
     if (isApiRequest(req)) {
       return res.status(403).json({
         success: false,

@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { AuthContext } from "../context/AuthContext";
 
 const Edit = () => {
+  const [file, setFile] = useState(null);
   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -87,7 +88,20 @@ const Edit = () => {
     const toastId = toast.loading("Updating listing...");
 
     try {
-      await axios.patch(`/api/listings/${id}`, form);
+      const formData = new FormData();
+
+      formData.append("title", form.title);
+      formData.append("desc", form.desc);
+      formData.append("price", Number(form.price));
+      formData.append("location", form.location);
+      formData.append("country", form.country);
+      formData.append("category", form.category);
+
+      if (file) {
+        formData.append("image", file);
+      }
+
+      await axios.patch(`/api/listings/${id}`, formData);
 
       toast.success("Listing updated successfully ✨", { id: toastId });
 
@@ -106,7 +120,6 @@ const Edit = () => {
       <h2 className="text-2xl font-semibold mb-4">Edit Listing</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-
         <input
           type="text"
           name="title"
@@ -127,13 +140,10 @@ const Edit = () => {
         />
 
         <input
-          type="text"
-          name="image"
-          value={form.image}
-          onChange={handleChange}
-          placeholder="Image URL"
+          type="file"
+          accept="image/*"
+          onChange={(e) => setFile(e.target.files[0])}
           className="w-full border p-2 rounded"
-          required
         />
 
         {form.image && (

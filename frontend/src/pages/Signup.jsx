@@ -16,7 +16,6 @@ const Signup = () => {
     try {
       const res = await axios.post("/api/signup", user);
       navigate("/listings");
-      console.log(res);
     } catch (error) {
       console.log(error);
     }

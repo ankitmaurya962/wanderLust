@@ -1,11 +1,57 @@
-import React from 'react'
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
 
 const Signin = () => {
+  const { setUser } = useContext(AuthContext);
+  const [login, setlogin] = useState({
+    username: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("/api/signin", login, {
+        withCredentials: true,
+      });
+
+      if (res.data.success) {
+        setUser(res.data.user); 
+        navigate("/listings");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <div>
-        <h1>signin</h1>
-    </div>
-  )
-}
+      <h1 className="text-[2rem]">Sign In</h1>
+      <form onSubmit={submitHandler}>
+        <label htmlFor="username">Username</label>
+        <input
+          type="text"
+          placeholder="username"
+          id="username"
+          onChange={(e) => setlogin({ ...login, username: e.target.value })}
+        />
 
-export default Signin
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          placeholder="password"
+          id="password"
+          onChange={(e) => setlogin({ ...login, password: e.target.value })}
+        />
+
+        <button className="red-300">Sign IN</button>
+      </form>
+    </div>
+  );
+};
+
+export default Signin;

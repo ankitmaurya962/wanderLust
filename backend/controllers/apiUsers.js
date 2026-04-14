@@ -1,7 +1,5 @@
 const User = require("../models/user.js");
 
-const User = require("../models/user.js");
-
 module.exports.signup = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
@@ -28,4 +26,22 @@ module.exports.signup = async (req, res, next) => {
       message: e.message,
     });
   }
+};
+
+module.exports.login = (req, res) => {
+  res.json({
+    success: true,
+    user: req.user,
+  });
+};
+
+module.exports.logout = (req, res, next) => {
+  req.logout((err) => {
+    if (err) return next(err);
+
+    res.json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  });
 };

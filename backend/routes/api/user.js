@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const wrapAsync = require("../utils/wrapAsync");
+const wrapAsync = require("../../utils/wrapAsync.js");
 const passport = require("passport");
 
-const usersController = require("../controllers/users.js");
+const usersController = require("../../controllers/apiUsers.js");
 
 //sign up
 router

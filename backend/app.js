@@ -61,6 +61,7 @@ const listingRouter = require("./routes/listing.js");
 const apiListingRouter = require("./routes/api/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
+const apiUserRouter = require("./routes/api/user.js")
 
 app.use(session(sessionOption));
 app.use(flash());
@@ -83,7 +84,7 @@ app.use("/listing", listingRouter);
 app.use("/api/listings", apiListingRouter);
 app.use("/listing/:id", reviewRouter);
 app.use("/", userRouter);
-app.use("/api", userRouter);
+app.use("/api", apiUserRouter);
 
 //home
 app.get(

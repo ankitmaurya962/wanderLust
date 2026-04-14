@@ -1,18 +1,20 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { useContext } from "react";
-import { AuthContext } from "../Context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 
 const Signin = () => {
   const { setUser } = useContext(AuthContext);
+
   const [login, setlogin] = useState({
     username: "",
     password: "",
   });
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || "/"; 
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -21,13 +23,15 @@ const Signin = () => {
       });
 
       if (res.data.success) {
-        setUser(res.data.user); 
-        navigate("/listings");
+        setUser(res.data.user);
+
+        navigate(from, { replace: true }); // ✅ now works
       }
     } catch (error) {
       console.log(error.message);
     }
   };
+
   return (
     <div>
       <h1 className="text-[2rem]">Sign In</h1>
@@ -37,7 +41,9 @@ const Signin = () => {
           type="text"
           placeholder="username"
           id="username"
-          onChange={(e) => setlogin({ ...login, username: e.target.value })}
+          onChange={(e) =>
+            setlogin({ ...login, username: e.target.value })
+          }
         />
 
         <label htmlFor="password">Password</label>
@@ -45,7 +51,9 @@ const Signin = () => {
           type="password"
           placeholder="password"
           id="password"
-          onChange={(e) => setlogin({ ...login, password: e.target.value })}
+          onChange={(e) =>
+            setlogin({ ...login, password: e.target.value })
+          }
         />
 
         <button className="red-300">Sign IN</button>

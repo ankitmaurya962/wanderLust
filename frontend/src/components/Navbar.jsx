@@ -2,28 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
-import { AuthContext } from "../Context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
   const [place, setPlace] = useState("");
   const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  // 🔥 fetch current user
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const res = await axios.get("/api/current", {
-          withCredentials: true,
-        });
-        setUser(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    getUser();
-  }, []);
 
   // 🔍 search
   const handleSubmit = (e) => {

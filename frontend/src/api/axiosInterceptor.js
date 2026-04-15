@@ -1,11 +1,11 @@
-import axios from "axios";
+import API from "../utils/api";
 import toast from "react-hot-toast";
 
 let isRedirecting = false;
 
-axios.defaults.withCredentials = true; // keep this
+API.defaults.withCredentials = true; // keep this
 
-axios.interceptors.response.use(
+API.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error.response?.status;

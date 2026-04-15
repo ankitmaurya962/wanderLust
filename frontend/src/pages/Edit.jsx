@@ -1,14 +1,23 @@
-import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import { useEffect, useState, useContext } from "react";
+import API from "../utils/api";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AuthContext } from "../context/AuthContext";
+import Navbar from "../components/Navbar";
+
+const categories = [
+  "trending", "rooms", "iconic", "mountains", "castles",
+  "pools", "camping", "farms", "forest", "arctic",
+  "boat", "spiritual", "desert"
+];
 
 const Edit = () => {
   const [file, setFile] = useState(null);
   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false); // 🔥 dropdown state
 
   const [form, setForm] = useState({
     title: "",
@@ -23,16 +32,14 @@ const Edit = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 🔹 Fetch existing listing
   useEffect(() => {
     const fetchListing = async () => {
       const toastId = toast.loading("Fetching listing...");
 
       try {
-        const res = await axios.get(`/api/listings/${id}`);
+        const res = await API.get(`/api/listings/${id}`);
         const data = res.data.data || res.data;
 
-        // 🔐 OWNER CHECK (🔥 main fix)
         if (user && user._id !== data.owner?._id) {
           toast.dismiss(toastId);
           toast.error("You are not authorized ❌");
@@ -53,7 +60,6 @@ const Edit = () => {
         toast.dismiss(toastId);
       } catch (err) {
         toast.dismiss(toastId);
-        console.error(err);
         setError("Failed to load listing");
       } finally {
         setLoading(false);
@@ -63,7 +69,6 @@ const Edit = () => {
     fetchListing();
   }, [id, user, navigate]);
 
-  // 🔹 Handle input change
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -71,7 +76,6 @@ const Edit = () => {
     });
   };
 
-  // 🔹 Submit update
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -90,128 +94,150 @@ const Edit = () => {
     try {
       const formData = new FormData();
 
-      formData.append("title", form.title);
-      formData.append("desc", form.desc);
-      formData.append("price", Number(form.price));
-      formData.append("location", form.location);
-      formData.append("country", form.country);
-      formData.append("category", form.category);
+      Object.entries(form).forEach(([key, value]) => {
+        if (key !== "image") formData.append(key, value);
+      });
+
+      formData.set("price", Number(form.price));
 
       if (file) {
         formData.append("image", file);
       }
 
-      await axios.patch(`/api/listings/${id}`, formData);
+      await API.patch(`/api/listings/${id}`, formData);
 
-      toast.success("Listing updated successfully ✨", { id: toastId });
-
+      toast.success("Listing updated ✨", { id: toastId });
       navigate(`/listings/${id}`);
     } catch (err) {
       toast.dismiss(toastId);
-      console.error(err);
     }
   };
 
-  if (loading) return <h2 className="text-center mt-10">Loading...</h2>;
-  if (error) return <h2 className="text-center text-red-500">{error}</h2>;
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-black text-white">
+        Loading...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-black text-red-400">
+        {error}
+      </div>
+    );
+  }
 
   return (
-    <div className="px-6 md:px-12 py-6 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4">Edit Listing</h2>
+    <div className="min-h-screen bg-black text-white">
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          placeholder="Title"
-          className="w-full border p-2 rounded"
-          required
-        />
+      <Navbar />
 
-        <textarea
-          name="desc"
-          value={form.desc}
-          onChange={handleChange}
-          placeholder="Description"
-          className="w-full border p-2 rounded"
-          required
-        />
+      <div className="pt-24 flex justify-center px-4">
+        <div className="w-full max-w-2xl bg-white/5 border border-white/10 rounded-2xl p-8">
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setFile(e.target.files[0])}
-          className="w-full border p-2 rounded"
-        />
+          <h2 className="text-3xl font-semibold mb-6 text-center">
+            Edit Listing
+          </h2>
 
-        {form.image && (
-          <img
-            src={form.image}
-            alt="preview"
-            className="w-full h-[250px] object-cover rounded"
-          />
-        )}
+          <form onSubmit={handleSubmit} className="space-y-5">
 
-        <select
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        >
-          <option value="">Select Category</option>
-          <option value="trending">Trending</option>
-          <option value="rooms">Rooms</option>
-          <option value="iconic">Iconic Cities</option>
-          <option value="mountains">Mountains</option>
-          <option value="castles">Castles</option>
-          <option value="pools">Pools</option>
-          <option value="camping">Camping</option>
-          <option value="farms">Farms</option>
-          <option value="forest">Forest</option>
-          <option value="arctic">Arctic</option>
-          <option value="boat">Boat</option>
-          <option value="spiritual">Spiritual</option>
-          <option value="desert">Desert</option>
-        </select>
+            <input
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              placeholder="Title"
+              className="w-full px-3 py-2 rounded bg-black text-white border border-white/20 focus:border-yellow-400 outline-none"
+              required
+            />
 
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            type="number"
-            name="price"
-            value={form.price}
-            onChange={handleChange}
-            placeholder="Price"
-            className="border p-2 rounded"
-            required
-          />
+            <textarea
+              name="desc"
+              value={form.desc}
+              onChange={handleChange}
+              placeholder="Description"
+              className="w-full px-3 py-2 rounded bg-black text-white border border-white/20 focus:border-yellow-400 outline-none"
+              required
+            />
 
-          <input
-            type="text"
-            name="country"
-            value={form.country}
-            onChange={handleChange}
-            placeholder="Country"
-            className="border p-2 rounded"
-          />
+            <input
+              type="file"
+              onChange={(e) => setFile(e.target.files[0])}
+              className="w-full px-3 py-2 rounded bg-black text-white border border-white/20 focus:border-yellow-400 outline-none"
+            />
+
+            {form.image && (
+              <img
+                src={form.image}
+                alt="preview"
+                className="w-full h-[250px] object-cover rounded-xl"
+              />
+            )}
+
+            {/* 🔥 Custom Dropdown (opens upward) */}
+            <div className="relative">
+              <div
+                onClick={() => setOpen(!open)}
+                className="w-full px-3 py-2 rounded bg-black border border-white/20 cursor-pointer"
+              >
+                {form.category || "Select Category"}
+              </div>
+
+              {open && (
+                <div className="absolute bottom-full mb-2 w-full bg-black border border-white/10 rounded-xl max-h-60 overflow-y-auto z-50">
+                  {categories.map((cat) => (
+                    <div
+                      key={cat}
+                      onClick={() => {
+                        setForm({ ...form, category: cat });
+                        setOpen(false);
+                      }}
+                      className="px-3 py-2 hover:bg-yellow-400 hover:text-black cursor-pointer capitalize"
+                    >
+                      {cat}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <input
+                type="number"
+                name="price"
+                value={form.price}
+                onChange={handleChange}
+                placeholder="Price"
+                className="w-full px-3 py-2 rounded bg-black text-white border border-white/20 focus:border-yellow-400 outline-none"
+                required
+              />
+
+              <input
+                name="country"
+                value={form.country}
+                onChange={handleChange}
+                placeholder="Country"
+                className="w-full px-3 py-2 rounded bg-black text-white border border-white/20 focus:border-yellow-400 outline-none"
+              />
+            </div>
+
+            <input
+              name="location"
+              value={form.location}
+              onChange={handleChange}
+              placeholder="Location"
+              className="w-full px-3 py-2 rounded bg-black text-white border border-white/20 focus:border-yellow-400 outline-none"
+              required
+            />
+
+            <button className="w-full bg-yellow-400 text-black py-2 rounded-full font-semibold hover:bg-yellow-300">
+              Update Listing
+            </button>
+
+          </form>
         </div>
-
-        <input
-          type="text"
-          name="location"
-          value={form.location}
-          onChange={handleChange}
-          placeholder="Location"
-          className="w-full border p-2 rounded"
-          required
-        />
-
-        <button className="bg-black text-white px-4 py-2 rounded">
-          Update Listing
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

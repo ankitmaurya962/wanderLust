@@ -1,31 +1,40 @@
-import React from "react";
-
 const ListingCard = ({ list, onClick }) => {
   return (
-    <div onClick={onClick} className="cursor-pointer group">
-      
+    <div
+      onClick={onClick}
+      className="cursor-pointer group"
+    >
       {/* Image */}
-      <div className="overflow-hidden rounded-xl">
+      <div className="relative overflow-hidden rounded-xl border border-white/10">
         <img
           src={list.image?.url || "https://via.placeholder.com/300"}
           alt={list.title}
-          className="h-[250px] w-full object-cover rounded-xl group-hover:scale-105 transition duration-300"
+          className="h-[250px] w-full object-cover transition duration-500 group-hover:scale-110"
         />
+
+        {/* 🔥 Overlay on hover */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition duration-300"></div>
       </div>
 
       {/* Info */}
-      <div className="mt-2">
-        <h2 className="font-semibold text-lg truncate">
+      <div className="mt-3 space-y-1">
+        
+        {/* Title */}
+        <h2 className="font-semibold text-white text-base truncate group-hover:text-yellow-400 transition">
           {list.title}
         </h2>
 
-        <p className="text-gray-500 text-sm">
+        {/* Subtitle */}
+        <p className="text-gray-400 text-sm">
           2 nights · Free cancellation
         </p>
 
-        <p className="mt-1 font-semibold">
+        {/* Price */}
+        <p className="text-white font-semibold">
           ₹{list.price}{" "}
-          <span className="font-normal text-gray-600">/ night</span>
+          <span className="text-gray-400 font-normal text-sm">
+            / night
+          </span>
         </p>
       </div>
     </div>

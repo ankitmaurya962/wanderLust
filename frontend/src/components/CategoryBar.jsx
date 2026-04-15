@@ -1,4 +1,3 @@
-import React from "react";
 import {
   FaFire,
   FaBed,
@@ -17,6 +16,7 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 
 const categories = [
+  { name: "all", icon: null },
   { name: "trending", icon: <FaFire /> },
   { name: "rooms", icon: <FaBed /> },
   { name: "iconic", icon: <FaCity /> },
@@ -37,36 +37,54 @@ const CategoryBar = () => {
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
-  const place = queryParams.get("place");
+  const activeCategory = queryParams.get("category");
 
   return (
-    <div className="flex gap-6 overflow-x-auto px-4 py-2">
+    <div className="flex gap-8 overflow-x-auto px-6 py-3 border-b border-white/10 bg-black">
 
-      {/* ALL BUTTON */}
-      <div
-        onClick={() => navigate("/listings")}
-        className="flex flex-col items-center cursor-pointer hover:scale-110 transition"
-      >
-        <p className="text-sm">All</p>
-      </div>
+      {categories.map((cat) => {
+        const isActive =
+          (cat.name === "all" && !activeCategory) ||
+          activeCategory === cat.name;
 
-      {/* CATEGORIES */}
-      {categories.map((cat) => (
-        <div
-          key={cat.name}
-          onClick={() =>
-            navigate(
-              `/listings?category=${cat.name}${
-                place ? `&place=${place}` : ""
-              }`
-            )
-          }
-          className="flex flex-col items-center cursor-pointer hover:scale-110 transition"
-        >
-          <div className="text-xl">{cat.icon}</div>
-          <p className="text-sm">{cat.name}</p>
-        </div>
-      ))}
+        return (
+          <div
+            key={cat.name}
+            onClick={() =>
+              cat.name === "all"
+                ? navigate("/listings")
+                : navigate(
+                    `/listings?category=${cat.name}`
+                  )
+            }
+            className="flex flex-col items-center cursor-pointer group"
+          >
+            {/* Icon */}
+            {cat.icon && (
+              <div
+                className={`text-lg transition 
+                ${isActive ? "text-yellow-400" : "text-gray-400 group-hover:text-white"}`}
+              >
+                {cat.icon}
+              </div>
+            )}
+
+            {/* Text */}
+            <p
+              className={`text-xs mt-1 capitalize transition
+              ${isActive ? "text-yellow-400" : "text-gray-400 group-hover:text-white"}`}
+            >
+              {cat.name}
+            </p>
+
+            {/* Underline */}
+            <div
+              className={`h-[2px] w-6 mt-1 transition
+              ${isActive ? "bg-yellow-400" : "bg-transparent group-hover:bg-white"}`}
+            ></div>
+          </div>
+        );
+      })}
     </div>
   );
 };

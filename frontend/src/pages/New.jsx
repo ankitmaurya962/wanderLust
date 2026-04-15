@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import axios from "axios";
+import API from "../utils/api";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast"; // ✅ added
+import toast from "react-hot-toast";
+import Navbar from "../components/Navbar";
 
 const New = () => {
   const navigate = useNavigate();
 
   const [file, setFile] = useState(null);
-
+  const [preview, setPreview] = useState(null);
   const [form, setForm] = useState({
     title: "",
     price: "",
@@ -20,7 +21,6 @@ const New = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // handle input change
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -28,11 +28,10 @@ const New = () => {
     });
   };
 
-  // submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const toastId = toast.loading("Creating listing..."); // ✅ added
+    const toastId = toast.loading("Creating listing...");
 
     try {
       setLoading(true);
@@ -47,107 +46,162 @@ const New = () => {
       formData.append("category", form.category);
       formData.append("image", file);
 
-      const res = await axios.post("/api/listings", formData);
+      const res = await API.post("/api/listings", formData);
 
-      console.log(res.data);
-
-      toast.success("Listing created successfully 🎉", { id: toastId }); // ✅ added
+      toast.success("Listing created successfully 🎉", { id: toastId });
 
       navigate("/listings");
     } catch (err) {
-      toast.dismiss(toastId); // ✅ added
+      toast.dismiss(toastId);
       console.error(err.response?.data || err.message);
-      // ❌ removed alert (interceptor will handle error)
     } finally {
       setLoading(false);
     }
   };
 
+  const categories = [
+    "trending",
+    "rooms",
+    "iconic",
+    "mountains",
+    "castles",
+    "pools",
+    "camping",
+    "farms",
+    "arctic",
+    "boat",
+    "spiritual",
+    "forest",
+    "desert",
+  ];
+
+  const [open, setOpen] = useState(false);
   return (
-    <div className="px-6 md:px-12 py-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-4">Create New Listing</h1>
+    <div className="min-h-screen bg-black text-white">
+      {/* Navbar */}
+      <Navbar />
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          name="title"
-          placeholder="Title"
-          value={form.title}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        />
+      {/* Form Container */}
+      <div className="pt-24 px-4 flex justify-center">
+        <div className="w-full max-w-2xl bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-2xl">
+          <h1 className="text-3xl font-semibold mb-6 text-center">
+            Create New Listing
+          </h1>
 
-        <input
-          name="price"
-          placeholder="Price"
-          type="number"
-          value={form.price}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        />
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Title */}
+            <input
+              name="title"
+              placeholder="Title"
+              value={form.title}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded bg-black text-white border border-white/20 focus:border-yellow-400 outline-none"
+              required
+            />
 
-        <input
-          name="location"
-          placeholder="Location"
-          value={form.location}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        />
+            {/* Price */}
+            <input
+              name="price"
+              type="number"
+              placeholder="Price"
+              value={form.price}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded bg-black text-white border border-white/20 focus:border-yellow-400 outline-none"
+              required
+            />
 
-        <input
-          name="country"
-          placeholder="Country"
-          value={form.country}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-        />
+            {/* Location */}
+            <input
+              name="location"
+              placeholder="Location"
+              value={form.location}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded bg-black text-white border border-white/20 focus:border-yellow-400 outline-none"
+              required
+            />
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setFile(e.target.files[0])}
-          className="w-full border p-2 rounded"
-        />
+            {/* Country */}
+            <input
+              name="country"
+              placeholder="Country"
+              value={form.country}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded bg-black text-white border border-white/20 focus:border-yellow-400 outline-none"
+            />
 
-        <textarea
-          name="desc"
-          placeholder="Description"
-          value={form.desc}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-        />
+            {/* File Upload */}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const selectedFile = e.target.files[0];
+                setFile(selectedFile);
 
-        <select
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-        >
-          <option value="">Select Category</option>
-          <option value="trending">Trending</option>
-          <option value="rooms">Rooms</option>
-          <option value="iconic">Iconic</option>
-          <option value="mountains">Mountains</option>
-          <option value="castles">Castles</option>
-          <option value="pools">Pools</option>
-          <option value="camping">Camping</option>
-          <option value="farms">Farms</option>
-          <option value="arctic">Arctic</option>
-          <option value="boat">Boat</option>
-          <option value="spiritual">Spiritual</option>
-          <option value="forest">Forest</option>
-          <option value="desert">Desert</option>
-        </select>
+                if (selectedFile) {
+                  setPreview(URL.createObjectURL(selectedFile));
+                }
+              }}
+              className="w-full text-sm text-gray-300 file:bg-yellow-400 file:text-black file:px-4 file:py-2 file:rounded-full file:border-none file:cursor-pointer"
+            />
+            {preview ? (
+              <img
+                src={preview}
+                className="w-full h-[250px] object-cover rounded-xl mt-2"
+              />
+            ) : (
+              form.image && (
+                <img
+                  src={form.image}
+                  className="w-full h-[250px] object-cover rounded-xl mt-2"
+                />
+              )
+            )}
+            {/* Description */}
+            <textarea
+              name="desc"
+              placeholder="Description"
+              value={form.desc}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded bg-black text-white border border-white/20 focus:border-yellow-400 outline-none"
+            />
 
-        <button
-          disabled={loading}
-          className="bg-black text-white px-4 py-2 rounded"
-        >
-          {loading ? "Creating..." : "Create"}
-        </button>
-      </form>
+            {/* Category */}
+            <div className="relative">
+              <div
+                onClick={() => setOpen(!open)}
+                className="w-full px-3 py-2 rounded bg-black text-white border border-white/20 cursor-pointer"
+              >
+                {form.category || "Select Category"}
+              </div>
+
+              {open && (
+                <div className="absolute bottom-full mb-2 w-full bg-black border border-white/10 rounded-xl max-h-60 overflow-y-auto z-50">
+                  {categories.map((cat) => (
+                    <div
+                      key={cat}
+                      onClick={() => {
+                        setForm({ ...form, category: cat });
+                        setOpen(false);
+                      }}
+                      className="px-3 py-2 hover:bg-yellow-400 hover:text-black cursor-pointer capitalize"
+                    >
+                      {cat}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Button */}
+            <button
+              disabled={loading}
+              className="w-full bg-yellow-400 text-black py-2 rounded-full font-semibold hover:bg-yellow-300 transition"
+            >
+              {loading ? "Creating..." : "Create Listing"}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

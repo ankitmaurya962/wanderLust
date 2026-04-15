@@ -14,28 +14,33 @@ import { Toaster } from "react-hot-toast";
 
 const App = () => {
   return (
-    <>
+    <div className="min-h-screen flex flex-col bg-black">
+
       <Navbar />
       <Toaster position="top-center" />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/listings" element={<Index />} />
-        <Route path="/listings/:id" element={<Show />} />
-        <Route
-          path="/listings/new"
-          element={
-            <ProtectedRoute>
-              <New />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/listings/:id/edit" element={<Edit />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
-      </Routes>
+
+      {/* 👇 MAIN CONTENT */}
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/listings" element={<Index />} />
+          <Route path="/listings/:id" element={<Show />} />
+          <Route
+            path="/listings/new"
+            element={
+              <ProtectedRoute>
+                <New />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/listings/:id/edit" element={<Edit />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<Signin />} />
+        </Routes>
+      </div>
 
       <Footer />
-    </>
+    </div>
   );
 };
 

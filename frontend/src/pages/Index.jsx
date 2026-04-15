@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../utils/api";
 import { useNavigate, useLocation } from "react-router-dom";
 import ListingCard from "../components/ListingCard";
 import CategoryBar from "../components/CategoryBar";
-import toast from "react-hot-toast"; // ✅ added
+import Navbar from "../components/Navbar";
+import toast from "react-hot-toast";
+
 
 const Index = () => {
   const [listings, setListings] = useState([]);
@@ -11,7 +13,6 @@ const Index = () => {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
-
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
@@ -20,26 +21,21 @@ const Index = () => {
 
   useEffect(() => {
     const fetchListings = async () => {
-      const toastId = toast.loading("Fetching listings..."); // ✅ added
+      const toastId = toast.loading("Fetching listings...");
 
       try {
         setLoading(true);
 
-        const res = await axios.get("/api/listings", {
-          params: {
-            place,
-            category,
-          },
+        const res = await API.get("/api/listings", {
+          params: { place, category },
         });
 
         setListings(res.data);
-
-        toast.dismiss(toastId); // ✅ added
+        toast.dismiss(toastId);
       } catch (err) {
-        toast.dismiss(toastId); // ✅ added
+        toast.dismiss(toastId);
         console.error(err);
         setError("Failed to load listings");
-        // ❌ no toast.error (handled by interceptor)
       } finally {
         setLoading(false);
       }
@@ -48,32 +44,63 @@ const Index = () => {
     fetchListings();
   }, [place, category]);
 
+  // Loading UI
   if (loading) {
-    return <h2 className="text-center mt-10 text-lg">Loading...</h2>;
+    return (
+      <div className="h-screen flex items-center justify-center bg-black text-white">
+        <h2 className="text-lg animate-pulse">Loading listings...</h2>
+      </div>
+    );
   }
 
+  // Error UI
   if (error) {
-    return <h2 className="text-center mt-10 text-red-500">{error}</h2>;
+    return (
+      <div className="h-screen flex items-center justify-center bg-black">
+        <h2 className="text-red-400 text-lg">{error}</h2>
+      </div>
+    );
   }
 
   return (
-    <div className="px-6 md:px-12 py-6">
-      <CategoryBar />
+    <div className="min-h-screen bg-black text-white">
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {listings.length > 0 ? (
-          listings.map((list) => (
-            <ListingCard
-              key={list._id}
-              list={list}
-              onClick={() => navigate(`/listings/${list._id}`)}
-            />
-          ))
-        ) : (
-          <p className="col-span-full text-center text-gray-500">
-            No listings found
-          </p>
-        )}
+      {/* Navbar */}
+      <Navbar />
+
+      {/* Content */}
+      <div className="pt-24 px-6 md:px-12 pb-10">
+
+        {/* Category Bar */}
+        <div className="mb-8">
+          <CategoryBar />
+        </div>
+
+        {/* Heading */}
+        <h2 className="text-2xl font-semibold mb-6">
+          Explore Places
+        </h2>
+
+        {/* Listings Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+          {listings.length > 0 ? (
+            listings.map((list) => (
+              <div
+                key={list._id}
+                className="bg-white/5 backdrop-blur-md rounded-xl overflow-hidden hover:scale-105 transition cursor-pointer border border-white/10"
+                onClick={() => navigate(`/listings/${list._id}`)}
+              >
+                <ListingCard list={list} />
+              </div>
+            ))
+          ) : (
+            <p className="col-span-full text-center text-gray-400">
+              No listings found
+            </p>
+          )}
+
+        </div>
       </div>
     </div>
   );

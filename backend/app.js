@@ -1,4 +1,4 @@
-require('dotenv').config() ;
+require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -11,10 +11,12 @@ const MongoStore = require("connect-mongo").default;
 const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
+const cors = require("cors"); // ✅ ADDED
 const User = require("./models/user.js");
-const wrapAsync = require("./utils/wrapAsync.js")
+const wrapAsync = require("./utils/wrapAsync.js");
 
 const app = express();
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.json());
@@ -23,20 +25,38 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 
+
+// ✅ TRUST PROXY (IMPORTANT FOR RENDER)
+app.set("trust proxy", 1);
+
+
+// ✅ CORS CONFIG (VERY IMPORTANT)
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://wander-lust-lac.vercel.app",
+    ],
+    credentials: true,
+  })
+);
+
 const dbURL = process.env.ATLASDB_URL;
 
+// SESSION STORE
 const store = MongoStore.create({
   mongoUrl: dbURL,
-  crypto:{
-    secret: process.env.SECRET
+  crypto: {
+    secret: process.env.SECRET,
   },
-  touchAfter: 24*3600
+  touchAfter: 24 * 3600,
 });
 
-store.on("error", ()=>{
+store.on("error", () => {
   console.log("Error in Mongo Session");
-})
+});
 
+// SESSION CONFIG
 const sessionOption = {
   store,
   secret: process.env.SECRET,
@@ -46,6 +66,8 @@ const sessionOption = {
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
+    secure: true,       // ✅ REQUIRED FOR CROSS ORIGIN
+    sameSite: "none",   // ✅ REQUIRED FOR FRONTEND (VERCEL)
   },
 };
 
@@ -57,30 +79,35 @@ main()
   .catch((err) => console.log(err));
 
 
+// ROUTES
 const listingRouter = require("./routes/listing.js");
 const apiListingRouter = require("./routes/api/listing.js");
 const reviewRouter = require("./routes/review.js");
-const apiReviewRouter = require("./routes/api/review.js")
+const apiReviewRouter = require("./routes/api/review.js");
 const userRouter = require("./routes/user.js");
-const apiUserRouter = require("./routes/api/user.js")
+const apiUserRouter = require("./routes/api/user.js");
 
+
+// ✅ SESSION MUST COME AFTER CORS
 app.use(session(sessionOption));
 app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
+
 passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser()); 
+passport.deserializeUser(User.deserializeUser());
 
-//middleware for flash
-app.use((req, res, next)=>{
+// FLASH MIDDLEWARE
+app.use((req, res, next) => {
   res.locals.msg = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.currUser = req.user;
   next();
-})
+});
 
+// ROUTES
 app.use("/listing", listingRouter);
 app.use("/api/listings", apiListingRouter);
 app.use("/listing/:id", reviewRouter);
@@ -88,23 +115,23 @@ app.use("/api/listings/:id", apiReviewRouter);
 app.use("/", userRouter);
 app.use("/api", apiUserRouter);
 
-//home
+// HOME
 app.get(
   "/",
   wrapAsync(async (req, res, next) => {
-    res.render("listing/home"); // Renders views/listing/home.ejs
-  }),
+    res.render("listing/home");
+  })
 );
 
-//if page is not found (if no route is found)
+// 404 HANDLER
 app.use((req, res, next) => {
   next(new CustomError(404, "page not found"));
 });
 
+// ERROR HANDLER
 app.use((err, req, res, next) => {
   let { status = 500, message = "something went wrong" } = err;
 
-  // ✅ If API request → send JSON
   if (req.originalUrl.startsWith("/api")) {
     return res.status(status).json({
       success: false,
@@ -112,10 +139,8 @@ app.use((err, req, res, next) => {
     });
   }
 
-  // ✅ Otherwise (EJS routes) → render page
   res.status(status).render("error", { message });
 });
-
 
 app.listen(8080, () => {
   console.log("listening on port 8080");

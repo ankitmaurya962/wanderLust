@@ -32,3 +32,33 @@ module.exports.reviewSchema = Joi.object({
     comments: Joi.string().required(),
   }).required(),
 });
+
+module.exports.bookingSchema = Joi.object({
+  user: Joi.string().length(24).hex().required(),
+  listing: Joi.string().length(24).hex().required(),
+
+  checkIn: Joi.date().required(),
+
+  checkOut: Joi.date()
+    .greater(Joi.ref("checkIn"))
+    .required()
+    .messages({
+      "date.greater": "Check-out must be after check-in",
+    }),
+
+  guests: Joi.number().min(1).default(1),
+
+  totalPrice: Joi.number().min(0).optional(),
+
+  orderId: Joi.string().allow("", null),
+  paymentId: Joi.string().allow("", null),
+  signature: Joi.string().allow("", null),
+
+  paymentStatus: Joi.string()
+    .valid("pending", "paid", "failed")
+    .default("pending"),
+
+  bookingStatus: Joi.string()
+    .valid("confirmed", "cancelled")
+    .default("confirmed"),
+});

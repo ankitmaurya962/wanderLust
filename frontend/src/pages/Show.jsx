@@ -7,6 +7,7 @@ import Map from "../components/Map";
 import StarRating from "../components/StarRating";
 import Rating from "@mui/material/Rating";
 import Navbar from "../components/Navbar";
+import Booking from "../components/Booking"
 
 const Show = () => {
   const { id } = useParams();
@@ -118,7 +119,7 @@ const Show = () => {
 
         {/* Image */}
         <img
-          src={listing.image?.url || "https://via.placeholder.com/400"}
+          src={listing.image?.url || "https://res.cloudinary.com/dldtcjzis/image/upload/v1776517498/defaultlisting_zpazmc.jpg"}
           alt="listing"
           className="w-full h-[400px] object-cover rounded-xl border border-white/10"
         />
@@ -136,6 +137,8 @@ const Show = () => {
             ₹{listing.price?.toLocaleString("en-IN")}
           </p>
         </div>
+
+        <Booking price={listing.price}></Booking>
 
         {/* Owner Actions */}
         {user?._id === listing.owner?._id && (

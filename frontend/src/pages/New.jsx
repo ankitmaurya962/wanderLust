@@ -44,7 +44,9 @@ const New = () => {
       formData.append("country", form.country);
       formData.append("desc", form.desc);
       formData.append("category", form.category);
-      formData.append("image", file);
+      if (file) {
+        formData.append("image", file);
+      }
 
       const res = await API.post("/api/listings", formData);
 
@@ -143,19 +145,13 @@ const New = () => {
               }}
               className="w-full text-sm text-gray-300 file:bg-yellow-400 file:text-black file:px-4 file:py-2 file:rounded-full file:border-none file:cursor-pointer"
             />
-            {preview ? (
-              <img
-                src={preview}
-                className="w-full h-[250px] object-cover rounded-xl mt-2"
-              />
-            ) : (
-              form.image && (
-                <img
-                  src={form.image}
-                  className="w-full h-[250px] object-cover rounded-xl mt-2"
-                />
-              )
-            )}
+            <img
+              src={
+                preview ||
+                "https://res.cloudinary.com/dldtcjzis/image/upload/v1776517498/defaultlisting_zpazmc.jpg"
+              }
+              className="w-full h-[250px] object-cover rounded-xl mt-2"
+            />
             {/* Description */}
             <textarea
               name="desc"

@@ -11,7 +11,7 @@ const MongoStore = require("connect-mongo").default;
 const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
-const cors = require("cors"); // ✅ ADDED
+const cors = require("cors"); 
 const User = require("./models/user.js");
 const wrapAsync = require("./utils/wrapAsync.js");
 
@@ -86,6 +86,8 @@ const reviewRouter = require("./routes/review.js");
 const apiReviewRouter = require("./routes/api/review.js");
 const userRouter = require("./routes/user.js");
 const apiUserRouter = require("./routes/api/user.js");
+const razorpayroute = require("./routes/api/razorpayroute.js");
+const verifyroute = require("./routes/api/verifyroute.js");
 
 
 // ✅ SESSION MUST COME AFTER CORS
@@ -114,6 +116,8 @@ app.use("/listing/:id", reviewRouter);
 app.use("/api/listings/:id", apiReviewRouter);
 app.use("/", userRouter);
 app.use("/api", apiUserRouter);
+app.use('/api', razorpayroute);
+app.use('/api', verifyroute);
 
 // HOME
 app.get(

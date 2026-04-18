@@ -23,8 +23,8 @@ router
   .patch(
     isLoggedIn,
     isOwner,
-    validate,
     upload.single('image'),
+    validate,
     wrapAsync(listingController.edit), //edit
   )
   .delete(isLoggedIn, isOwner, wrapAsync(listingController.delete)); //delete

@@ -1,5 +1,5 @@
 const Listing = require("../models/listing");
-const getCoordinates = require("../utils/geocoding"); 
+const getCoordinates = require("../utils/geocoding");
 
 module.exports.index = async (req, res, next) => {
   const { category, place } = req.query;
@@ -7,8 +7,8 @@ module.exports.index = async (req, res, next) => {
   if (category) {
     filter.category = category;
   }
-  if(place){
-    filter.location = {$regex: place, $options: 'i'};
+  if (place) {
+    filter.location = { $regex: place, $options: "i" };
   }
   const AllList = await Listing.find(filter);
   res.render("./listing/index.ejs", { AllList });
@@ -19,11 +19,15 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.newListing = async (req, res, next) => {
+  console.log(req.body);
   const list = new Listing(req.body);
   list.owner = req.user._id;
-  let url = req.file.path;
-  let filename = req.file.filename;
-  list.image = { url, filename };
+  if (req.file) {
+    let url = req.file.path;
+    let filename = req.file.filename;
+    list.image = {url, filename};
+  }
+  
   //coordinates
   const geometry = await getCoordinates(req.body.location);
   list.geometry = geometry;
@@ -53,7 +57,7 @@ module.exports.renderEditForm = async (req, res, next) => {
   }
   const originalUrl = list.image.url;
   const modifiedUrl = originalUrl.replace("/upload", "/upload/h_150,w_200");
-  res.render("./listing/edit", { list, modifiedUrl});
+  res.render("./listing/edit", { list, modifiedUrl });
 };
 
 module.exports.edit = async (req, res, next) => {

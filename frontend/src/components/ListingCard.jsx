@@ -7,7 +7,7 @@ const ListingCard = ({ list, onClick }) => {
       {/* Image */}
       <div className="relative overflow-hidden rounded-xl border border-white/10">
         <img
-          src={list.image?.url || "https://via.placeholder.com/300"}
+          src={list.image?.url || "https://res.cloudinary.com/dldtcjzis/image/upload/v1776517498/defaultlisting_zpazmc.jpg"}
           alt={list.title}
           className="h-[250px] w-full object-cover transition duration-500 group-hover:scale-110"
         />

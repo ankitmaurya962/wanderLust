@@ -11,6 +11,7 @@ import Signin from "./pages/Signin";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Toaster } from "react-hot-toast";
+import MyBooking from "./pages/MyBooking";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/listings/:id/edit" element={<Edit />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
+          <Route path="/mybooking" element={<MyBooking/>}/>
         </Routes>
       </div>
 

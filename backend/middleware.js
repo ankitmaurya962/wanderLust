@@ -1,5 +1,5 @@
 const Listing = require("./models/listing");
-const { listingSchema, reviewSchema } = require("./schema");
+const { listingSchema, reviewSchema, bookingSchema } = require("./schema");
 const CustomError = require("./utils/CustomError");
 const Review = require("./models/review");
 
@@ -115,6 +115,26 @@ module.exports.validate = (req, res, next) => {
 // =============================
 module.exports.reviewValidate = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
+
+  if (error) {
+    const errMsg = error.details.map((el) => el.message).join(",");
+
+    if (isApiRequest(req)) {
+      return res.status(400).json({
+        success: false,
+        message: errMsg,
+      });
+    }
+
+    throw new CustomError(400, errMsg);
+  }
+
+  next();
+};
+
+//Booking Validation
+module.exports.bookingValidate = (req, res, next) => {
+  const { error } = bookingSchema.validate(req.body);
 
   if (error) {
     const errMsg = error.details.map((el) => el.message).join(",");

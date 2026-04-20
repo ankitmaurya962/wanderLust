@@ -34,7 +34,6 @@ module.exports.reviewSchema = Joi.object({
 });
 
 module.exports.bookingSchema = Joi.object({
-  user: Joi.string().length(24).hex().required(),
   listing: Joi.string().length(24).hex().required(),
 
   checkIn: Joi.date().required(),

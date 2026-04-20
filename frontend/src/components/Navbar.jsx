@@ -93,6 +93,9 @@ const Navbar = () => {
               >
                 Logout
               </button>
+              <Link to="/mybooking"> 
+                My Booking
+              </Link>
             </>
           )}
 

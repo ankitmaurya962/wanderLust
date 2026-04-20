@@ -66,8 +66,8 @@ const sessionOption = {
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
-    secure: true,       // ✅ REQUIRED FOR CROSS ORIGIN
-    sameSite: "none",   // ✅ REQUIRED FOR FRONTEND (VERCEL)
+    secure: false,       // ✅ REQUIRED FOR CROSS ORIGIN
+    sameSite: "lax",   // ✅ REQUIRED FOR FRONTEND (VERCEL)
   },
 };
 
@@ -88,6 +88,8 @@ const userRouter = require("./routes/user.js");
 const apiUserRouter = require("./routes/api/user.js");
 const razorpayroute = require("./routes/api/razorpayroute.js");
 const verifyroute = require("./routes/api/verifyroute.js");
+const bookingRoute = require("./routes/api/bookingRoute.js");
+const myBookingRoute = require("./routes/api/myBookingRoute.js");
 
 
 // ✅ SESSION MUST COME AFTER CORS
@@ -118,6 +120,8 @@ app.use("/", userRouter);
 app.use("/api", apiUserRouter);
 app.use('/api', razorpayroute);
 app.use('/api', verifyroute);
+app.use('/api', bookingRoute);
+app.use('/api', myBookingRoute);
 
 // HOME
 app.get(

@@ -15,7 +15,6 @@ module.exports.index = async (req, res, next) => {
 };
 
 module.exports.newListing = async (req, res, next) => {
-  try {
     const geometry = await getCoordinates(req.body.location);
 
     const list = new Listing({
@@ -46,13 +45,9 @@ module.exports.newListing = async (req, res, next) => {
       message: "Listing created",
       data: list,
     });
-  } catch (err) {
-    next(err);
-  }
 };
 
 module.exports.show = async (req, res, next) => {
-  try {
     const { id } = req.params;
 
     const data = await Listing.findById(id)
@@ -67,13 +62,9 @@ module.exports.show = async (req, res, next) => {
     }
 
     res.json(data);
-  } catch (err) {
-    next(err);
-  }
 };
 
 module.exports.edit = async (req, res, next) => {
-  try {
     const { id } = req.params;
 
     // ✅ Only geocode if location is provided & not empty
@@ -124,14 +115,9 @@ module.exports.edit = async (req, res, next) => {
       message: "Listing updated",
       data: list,
     });
-
-  } catch (err) {
-    next(err);
-  }
 };
 
 module.exports.delete = async (req, res, next) => {
-  try {
     const { id } = req.params;
 
     const deleted = await Listing.findByIdAndDelete(id);
@@ -147,7 +133,4 @@ module.exports.delete = async (req, res, next) => {
       success: true,
       message: "Listing deleted",
     });
-  } catch (err) {
-    next(err);
-  }
 };

@@ -7,7 +7,7 @@ import Map from "../components/Map";
 import StarRating from "../components/StarRating";
 import Rating from "@mui/material/Rating";
 import Navbar from "../components/Navbar";
-import Booking from "../components/Booking"
+import Booking from "../components/Booking";
 
 const Show = () => {
   const { id } = useParams();
@@ -113,32 +113,64 @@ const Show = () => {
       {/* Navbar */}
       <Navbar />
 
-      <div className="pt-24 px-6 md:px-12 pb-10 max-w-5xl mx-auto">
+      <div className="pt-24 px-6 md:px-12 pb-10 max-w-6xl mx-auto">
         {/* Title */}
         <h2 className="text-3xl font-semibold mb-6">{listing.title}</h2>
 
         {/* Image */}
         <img
-          src={listing.image?.url || "https://res.cloudinary.com/dldtcjzis/image/upload/v1776517498/defaultlisting_zpazmc.jpg"}
+          src={
+            listing.image?.url ||
+            "https://res.cloudinary.com/dldtcjzis/image/upload/v1776517498/defaultlisting_zpazmc.jpg"
+          }
           alt="listing"
           className="w-full h-[400px] object-cover rounded-xl border border-white/10"
         />
 
-        {/* Info */}
-        <div className="mt-6 space-y-2 text-gray-300">
-          <p className="font-semibold text-white">
-            Hosted by {listing.owner?.username}
-          </p>
-          <p>{listing.desc}</p>
-          <p>
-            {listing.location}, {listing.country}
-          </p>
-          <p className="text-xl font-semibold text-yellow-400">
-            ₹{listing.price?.toLocaleString("en-IN")}
-          </p>
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-6">
+          {/* LEFT SIDE (Details) */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Info */}
+            <div className="space-y-2 text-gray-300">
+              <p className="font-semibold text-white">
+                Hosted by {listing.owner?.username}
+              </p>
+              <p>{listing.desc}</p>
+              <p>
+                {listing.location}, {listing.country}
+              </p>
+              <p className="text-xl font-semibold text-yellow-400">
+                ₹{listing.price?.toLocaleString("en-IN")}
+              </p>
+            </div>
 
-        <Booking price={listing.price}></Booking>
+            {/* Owner Actions */}
+            {user?._id === listing.owner?._id && (
+              <div className="flex gap-4">
+                <button
+                  onClick={() => navigate(`/listings/${id}/edit`)}
+                  className="bg-yellow-400 text-black px-4 py-2 rounded-full font-medium"
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={handleDeleteListing}
+                  className="bg-red-500 px-4 py-2 rounded-full"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT SIDE (Booking Card) */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-28">
+              <Booking price={listing.price} listingId={listing._id}/>
+            </div>
+          </div>
+        </div>
 
         {/* Owner Actions */}
         {user?._id === listing.owner?._id && (

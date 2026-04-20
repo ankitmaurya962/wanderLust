@@ -12,7 +12,7 @@ module.exports.createReview = async (req, res) => {
 
   await newReview.save();
   await listing.save();
-console.log("USER:", req.user);
+  console.log("USER:", req.user);
   // ✅ React-friendly response
   res.status(201).json({
     success: true,
@@ -20,7 +20,6 @@ console.log("USER:", req.user);
     review: newReview,
   });
 };
-
 
 // 🔹 DELETE REVIEW
 module.exports.destroyReview = async (req, res) => {

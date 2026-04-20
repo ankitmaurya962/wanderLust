@@ -34,7 +34,9 @@ const Signin = () => {
         navigate(from, { replace: true });
       }
     } catch (error) {
-      toast.dismiss(toastId);
+      toast.error(error.response?.data?.message || "Login failed ❌", {
+        id: toastId,
+      });
     }
   };
 
@@ -47,26 +49,18 @@ const Signin = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-
       {/* Navbar */}
       <Navbar />
 
       {/* Centered Form */}
       <div className="flex items-center justify-center h-[90vh] px-4">
-
         <div className="w-full max-w-md bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-2xl">
-
-          <h1 className="text-3xl font-semibold mb-6 text-center">
-            Sign In
-          </h1>
+          <h1 className="text-3xl font-semibold mb-6 text-center">Sign In</h1>
 
           <form onSubmit={submitHandler} className="space-y-5">
-
             {/* Username */}
             <div>
-              <label className="block mb-1 text-sm">
-                Username
-              </label>
+              <label className="block mb-1 text-sm">Username</label>
               <input
                 type="text"
                 placeholder="Enter username"
@@ -80,9 +74,7 @@ const Signin = () => {
 
             {/* Password */}
             <div>
-              <label className="block mb-1 text-sm">
-                Password
-              </label>
+              <label className="block mb-1 text-sm">Password</label>
               <input
                 type="password"
                 placeholder="Enter password"
@@ -98,11 +90,8 @@ const Signin = () => {
             <button className="w-full bg-yellow-400 text-black py-2 rounded-full font-semibold hover:bg-yellow-300 transition">
               Sign In
             </button>
-
           </form>
-
         </div>
-
       </div>
     </div>
   );

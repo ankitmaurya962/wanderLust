@@ -16,8 +16,6 @@ import MyBooking from "./pages/MyBooking";
 const App = () => {
   return (
     <div className="min-h-screen flex flex-col bg-black">
-
-      <Navbar />
       <Toaster position="top-center" />
 
       {/* 👇 MAIN CONTENT */}

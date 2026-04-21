@@ -75,10 +75,16 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-4 text-sm">
           {!user ? (
             <>
-              <Link className="text-white hover:text-yellow-400 transition" to="/signup">
+              <Link
+                className="text-white hover:text-yellow-400 transition"
+                to="/signup"
+              >
                 Sign up
               </Link>
-              <Link className="text-white hover:text-yellow-400 transition" to="/signin">
+              <Link
+                className="text-white hover:text-yellow-400 transition"
+                to="/signin"
+              >
                 Sign in
               </Link>
             </>
@@ -93,9 +99,7 @@ const Navbar = () => {
               >
                 Logout
               </button>
-              <Link to="/mybooking"> 
-                My Booking
-              </Link>
+              <Link to="/mybooking">My Booking</Link>
             </>
           )}
 
@@ -119,7 +123,6 @@ const Navbar = () => {
       {/* MOBILE MENU */}
       {menuOpen && (
         <div className="fixed top-[64px] left-0 w-full bg-black px-5 py-6 flex flex-col gap-5 md:hidden z-40">
-          
           {/* SEARCH */}
           <form
             onSubmit={handleSubmit}
@@ -157,7 +160,8 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <span className="text-white font-medium">
+              <Link to="/mybooking" className="text-white font-medium flex justify-center">My Booking</Link>
+              <span className="text-white font-medium flex justify-center" >
                 Hi, {user.username}
               </span>
               <button

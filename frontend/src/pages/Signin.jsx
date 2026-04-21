@@ -34,7 +34,7 @@ const Signin = () => {
         navigate(from, { replace: true });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Login failed ❌", {
+      toast.error(error.response?.data?.message || "Invalid username or password ❌", {
         id: toastId,
       });
     }

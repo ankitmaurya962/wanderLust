@@ -18,14 +18,14 @@ module.exports.signup = async (req, res, next) => {
   });
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = async(req, res) => {
   res.json({
     success: true,
     user: req.user,
   });
 };
 
-module.exports.logout = (req, res, next) => {
+module.exports.logout = async(req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
 

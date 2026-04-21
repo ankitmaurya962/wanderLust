@@ -14,7 +14,7 @@ router
 router.route("/signin")
 .post(
   passport.authenticate("local"),
-  usersController.login,
+  wrapAsync(usersController.login),
 );
 
 // CURRENT USER (add this)
@@ -22,6 +22,6 @@ router.get("/current", (req, res) => {
   res.json(req.user || null);
 });
 
-router.get("/logout", usersController.logout);
+router.get("/logout", wrapAsync(usersController.logout));
 
 module.exports = router;

@@ -9,9 +9,12 @@ API.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error.response?.status;
-    const message =
-      error.response?.data?.message || "Something went wrong ❌";
+    const message = error.response?.data?.message || "Something went wrong ❌";
 
+    if (url.includes("/signin")) {
+      return Promise.reject(error);
+    }
+    
     // 🔐 Auth error
     if (status === 401) {
       if (!isRedirecting) {
@@ -28,5 +31,5 @@ API.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );

@@ -61,7 +61,7 @@ const sessionOption = {
   cookie: {
     httpOnly: true,
     secure: true, // 🔥 true only in production
-    sameSite: none, // 🔥 important
+    sameSite: 'none', // 🔥 important
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   },

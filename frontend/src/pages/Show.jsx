@@ -143,31 +143,12 @@ const Show = () => {
                 ₹{listing.price?.toLocaleString("en-IN")}
               </p>
             </div>
-
-            {/* Owner Actions */}
-            {user?._id === listing.owner?._id && (
-              <div className="flex gap-4">
-                <button
-                  onClick={() => navigate(`/listings/${id}/edit`)}
-                  className="bg-yellow-400 text-black px-4 py-2 rounded-full font-medium"
-                >
-                  Edit
-                </button>
-
-                <button
-                  onClick={handleDeleteListing}
-                  className="bg-red-500 px-4 py-2 rounded-full"
-                >
-                  Delete
-                </button>
-              </div>
-            )}
           </div>
 
           {/* RIGHT SIDE (Booking Card) */}
           <div className="lg:col-span-1">
             <div className="sticky top-28">
-              <Booking price={listing.price} listingId={listing._id}/>
+              <Booking price={listing.price} listingId={listing._id} />
             </div>
           </div>
         </div>

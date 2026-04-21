@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const {bookingController} = require('../../controllers/booking')
+const {bookingController, cancelBooking} = require('../../controllers/booking')
 const {bookingValidate, isLoggedIn} = require('../../middleware')
 const wrapAsync = require("../../utils/wrapAsync")
 
-router.post('/bookings', isLoggedIn, bookingValidate, wrapAsync(bookingController));
+router.post('/bookings', isLoggedIn, bookingValidate, wrapAsync(bookingController))
+.patch('/bookings/:id/cancel', wrapAsync(cancelBooking));
 
 module.exports = router;
+

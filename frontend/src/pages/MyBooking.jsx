@@ -1,9 +1,39 @@
 import React, { useEffect, useState } from "react";
 import API from "../utils/api";
 import Navbar from "../components/Navbar";
+import toast from "react-hot-toast";
 
 const MyBooking = () => {
   const [bookings, setBookings] = useState([]);
+  const [loadingId, setLoadingId] = useState(null);
+
+  const cancelHandler = async (id) => {
+    const confirm = window.confirm("Are you sure you want to cancel?");
+    if (!confirm) return;
+
+    try {
+      setLoadingId(id);
+
+      const res = await API.patch(`/api/bookings/${id}/cancel`);
+
+      // ✅ Update UI instantly
+      setBookings((prev) =>
+        prev.map((b) =>
+          b._id === id
+            ? { ...b, bookingStatus: "cancelled", paymentStatus: "refunded" }
+            : b,
+        ),
+      );
+
+      toast.success(res.data.message || "Booking cancelled");
+    } catch (err) {
+      const msg = err.response?.data?.message || "Booking cancel failed";
+
+      toast.error(msg);
+    } finally {
+      setLoadingId(null);
+    }
+  };
 
   useEffect(() => {
     const fetchBooking = async () => {
@@ -23,9 +53,7 @@ const MyBooking = () => {
       <Navbar />
 
       <div className="pt-24 px-6 md:px-12 pb-10">
-        <h1 className="text-3xl font-semibold mb-8">
-          My Bookings
-        </h1>
+        <h1 className="text-3xl font-semibold mb-8">My Bookings</h1>
 
         {bookings.length === 0 ? (
           <p className="text-gray-400">No bookings found</p>
@@ -75,8 +103,8 @@ const MyBooking = () => {
                         b.bookingStatus === "confirmed"
                           ? "bg-green-600"
                           : b.bookingStatus === "cancelled"
-                          ? "bg-red-600"
-                          : "bg-yellow-400 text-black"
+                            ? "bg-red-600"
+                            : "bg-yellow-400 text-black"
                       }`}
                     >
                       {b.bookingStatus}
@@ -89,7 +117,10 @@ const MyBooking = () => {
                       View
                     </button>
 
-                    <button className="bg-red-500 px-4 py-1 rounded-full hover:bg-red-600 transition">
+                    <button
+                      className="bg-red-500 px-4 py-1 rounded-full hover:bg-red-600 transition"
+                      onClick={() => cancelHandler(b._id)}
+                    >
                       Cancel
                     </button>
                   </div>

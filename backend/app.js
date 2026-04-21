@@ -60,8 +60,8 @@ const sessionOption = {
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: isProduction, // 🔥 true only in production
-    sameSite: isProduction ? "none" : "lax", // 🔥 important
+    secure: true, // 🔥 true only in production
+    sameSite: none, // 🔥 important
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   },

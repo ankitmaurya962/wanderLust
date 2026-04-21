@@ -11,7 +11,7 @@ const MongoStore = require("connect-mongo").default;
 const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
-const cors = require("cors");
+const cors = require("cors"); 
 const User = require("./models/user.js");
 const wrapAsync = require("./utils/wrapAsync.js");
 
@@ -25,16 +25,20 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 
+const isProduction = process.env.NODE_ENV === "production";
 // ✅ TRUST PROXY (IMPORTANT FOR RENDER)
 app.set("trust proxy", 1);
-const isProduction = process.env.NODE_ENV === "production";
+
 
 // ✅ CORS CONFIG (VERY IMPORTANT)
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://wander-lust-lac.vercel.app"],
+    origin: [
+      "http://localhost:5173",
+      "https://wander-lust-lac.vercel.app",
+    ],
     credentials: true,
-  }),
+  })
 );
 
 const dbURL = process.env.ATLASDB_URL;
@@ -52,7 +56,6 @@ store.on("error", () => {
   console.log("Error in Mongo Session");
 });
 
-// SESSION CONFIG
 const sessionOption = {
   store,
   secret: process.env.SECRET,
@@ -60,8 +63,8 @@ const sessionOption = {
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: isProduction, 
-    sameSite: isProduction ? "none" : "lax", 
+    secure: isProduction,                     // 🔥 key
+    sameSite: isProduction ? "none" : "lax",  // 🔥 key
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   },
@@ -74,6 +77,7 @@ main()
   .then(() => console.log("connected DB"))
   .catch((err) => console.log(err));
 
+
 // ROUTES
 const listingRouter = require("./routes/listing.js");
 const apiListingRouter = require("./routes/api/listing.js");
@@ -85,6 +89,7 @@ const razorpayroute = require("./routes/api/razorpayroute.js");
 const verifyroute = require("./routes/api/verifyroute.js");
 const bookingRoute = require("./routes/api/bookingRoute.js");
 const myBookingRoute = require("./routes/api/myBookingRoute.js");
+
 
 // ✅ SESSION MUST COME AFTER CORS
 app.use(session(sessionOption));
@@ -112,17 +117,17 @@ app.use("/listing/:id", reviewRouter);
 app.use("/api/listings/:id", apiReviewRouter);
 app.use("/", userRouter);
 app.use("/api", apiUserRouter);
-app.use("/api", razorpayroute);
-app.use("/api", verifyroute);
-app.use("/api", bookingRoute);
-app.use("/api", myBookingRoute);
+app.use('/api', razorpayroute);
+app.use('/api', verifyroute);
+app.use('/api', bookingRoute);
+app.use('/api', myBookingRoute);
 
 // HOME
 app.get(
   "/",
   wrapAsync(async (req, res, next) => {
     res.render("listing/home");
-  }),
+  })
 );
 
 // 404 HANDLER

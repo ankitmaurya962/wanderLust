@@ -138,7 +138,9 @@ app.use((req, res, next) => {
 // ERROR HANDLER
 app.use((err, req, res, next) => {
   let { status = 500, message = "something went wrong" } = err;
-
+  if (res.headersSent) {
+    return next(err); // 🔥 THIS FIXES YOUR BUG
+  }
   if (req.originalUrl.startsWith("/api")) {
     return res.status(status).json({
       success: false,

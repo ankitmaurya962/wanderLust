@@ -95,13 +95,15 @@ const MyBooking = () => {
                 key={b._id}
                 className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 flex gap-5 hover:scale-[1.02] transition duration-300 shadow-lg"
               >
-                <button
-                  onClick={() => deleteBooking(b._id)}
-                  disabled={loadingId === b._id}
-                  className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/40 hover:bg-red-500/80 text-white transition"
-                >
-                  {loadingId === b._id ? "..." : "✕"}
-                </button>
+                {b.bookingStatus === "cancelled" && (
+                  <button
+                    onClick={() => deleteBooking(b._id)}
+                    disabled={loadingId === b._id}
+                    className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/40 hover:bg-red-500/80 text-white transition"
+                  >
+                    {loadingId === b._id ? "..." : "✕"}
+                  </button>
+                )}
                 {/* image */}
                 <img
                   src={b.listing?.image?.url}

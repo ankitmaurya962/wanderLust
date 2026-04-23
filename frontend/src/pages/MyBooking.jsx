@@ -52,6 +52,23 @@ const MyBooking = () => {
     }
   };
 
+  const deleteBooking = async (id) => {
+    try {
+      setLoadingId(id);
+
+      await API.delete(`/api/bookings/${id}`);
+
+      // remove from UI
+      setBookings((prev) => prev.filter((b) => b._id !== id));
+
+      toast.success("Booking deleted");
+    } catch (err) {
+      toast.error("Delete failed");
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
   useEffect(() => {
     const fetchBooking = async () => {
       const res = await API.get("/api/mybooking");
@@ -76,8 +93,15 @@ const MyBooking = () => {
             {bookings.map((b) => (
               <div
                 key={b._id}
-                className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 flex gap-5 hover:scale-[1.02] transition duration-300 shadow-lg"
+                className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 flex gap-5 hover:scale-[1.02] transition duration-300 shadow-lg"
               >
+                <button
+                  onClick={() => deleteBooking(b._id)}
+                  disabled={loadingId === b._id}
+                  className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/40 hover:bg-red-500/80 text-white transition"
+                >
+                  {loadingId === b._id ? "..." : "✕"}
+                </button>
                 {/* image */}
                 <img
                   src={b.listing?.image?.url}
@@ -126,8 +150,10 @@ const MyBooking = () => {
                   {/* actions */}
                   <div className="mt-4 flex items-center justify-between">
                     {/* LEFT SIDE */}
-                    <button className="bg-yellow-400 text-black px-4 py-1.5 rounded-full font-medium hover:bg-yellow-300 transition"
-                    onClick={()=>navigate(`/listings/${b.listing?._id}`)}>
+                    <button
+                      className="bg-yellow-400 text-black px-4 py-1.5 rounded-full font-medium hover:bg-yellow-300 transition"
+                      onClick={() => navigate(`/listings/${b.listing?._id}`)}
+                    >
                       View
                     </button>
 

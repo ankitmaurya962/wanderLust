@@ -71,8 +71,9 @@ const Booking = ({ price, listingId }) => {
               signature: response.razorpay_signature,
               paymentStatus: "paid",
             });
-
+            navigate('/mybooking');
             toast.success("Booking confirmed ✅");
+            
           }
         },
 
@@ -105,6 +106,7 @@ const Booking = ({ price, listingId }) => {
             <input
               type="date"
               value={form.checkin}
+              min={new Date().toISOString().split("T")[0]}
               className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:ring-2 focus:ring-yellow-400 outline-none"
               onChange={(e) => setForm({ ...form, checkin: e.target.value })}
               id="checkin"
@@ -119,6 +121,7 @@ const Booking = ({ price, listingId }) => {
             <input
               type="date"
               value={form.checkout}
+              min={form.checkin || new Date().toISOString().split("T")[0]}
               className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:ring-2 focus:ring-yellow-400 outline-none"
               onChange={(e) => setForm({ ...form, checkout: e.target.value })}
               id="checkout"

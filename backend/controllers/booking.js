@@ -91,17 +91,34 @@ module.exports.cancelBooking = async (req, res, next) => {
   } else if (diff > 24) {
     refundAmount = totalPrice * 0.5;
   }
-  
+
   if (refundAmount <= 0) {
-  booking.bookingStatus = 'cancelled';
-  await booking.save();
-  return res.json({ message: "Booking cancelled. No refund applicable." });
-}
+    booking.bookingStatus = "cancelled";
+    await booking.save();
+    return res.json({ message: "Booking cancelled. No refund applicable." });
+  }
   const refund = await razorpay.payments.refund(booking.paymentId, {
     amount: Math.round(refundAmount * 100),
   });
 
-  booking.bookingStatus = 'cancelled';
+  booking.bookingStatus = "cancelled";
   await booking.save();
   res.json(refund);
+};
+
+module.exports.deleteBooking = async (req, res, next) => {
+  const { id } = req.params;
+  const deleted = await Booking.findByIdAndDelete(id);
+
+  if (!deleted) {
+    return res.status(404).json({
+      success: false,
+      message: "Booking not found",
+    });
+  }
+
+  res.json({
+    success: true,
+    message: "Booking deleted",
+  });
 };

@@ -152,7 +152,7 @@ const Booking = ({ price, listingId }) => {
           type="submit"
           className="w-full bg-yellow-400 text-black py-3 rounded-xl font-semibold hover:bg-yellow-300 transition duration-300 shadow-lg"
         >
-          {totalPrice ? "Pay Now" : "Check Price"}
+          {totalPrice ? "Pay Now" : "Book Now"}
         </button>
 
         <p className="text-xs text-gray-500 text-center">

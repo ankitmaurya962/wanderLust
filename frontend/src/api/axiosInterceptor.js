@@ -11,7 +11,7 @@ API.interceptors.response.use(
     const status = error.response?.status;
     const message = error.response?.data?.message || "Something went wrong ❌";
 
-    if (url.includes("/signin")) {
+    if (error.config?.url?.includes("/signin")) {
       return Promise.reject(error);
     }
     

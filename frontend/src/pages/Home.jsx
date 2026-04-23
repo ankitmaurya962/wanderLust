@@ -8,7 +8,7 @@ const Home = () => {
 
       {/* Background Image */}
       <img
-        src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85"
+        src="https://images.unsplash.com/photo-1628583768483-a762d81fa84c?q=80&w=1987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt="hero"
         className="absolute w-full h-full object-cover"
       />

@@ -3,16 +3,16 @@ const { listingSchema, reviewSchema, bookingSchema } = require("./schema");
 const CustomError = require("./utils/CustomError");
 const Review = require("./models/review");
 
-// 🔥 Helper: detect API request
+// Helper: detect API request
 const isApiRequest = (req) => req.originalUrl.startsWith("/api");
 
-// =============================
-// 🔐 AUTH CHECK
-// =============================
+
+// AUTH CHECK
+
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
 
-    // 👉 React / API
+    //React / API
     if (isApiRequest(req)) {
       return res.status(401).json({
         success: false,
@@ -20,7 +20,7 @@ module.exports.isLoggedIn = (req, res, next) => {
       });
     }
 
-    // 👉 EJS (existing site)
+    // EJS (existing site)
     req.session.redirectUrl = req.originalUrl;
     req.flash("error", "You must login first!");
     return res.redirect("/signin");
@@ -29,9 +29,9 @@ module.exports.isLoggedIn = (req, res, next) => {
   next();
 };
 
-// =============================
-// 🔁 SAVE REDIRECT (EJS only)
-// =============================
+
+//SAVE REDIRECT (EJS only)
+
 module.exports.saveRedirectUrl = (req, res, next) => {
   if (!isApiRequest(req) && req.session.redirectUrl) {
     res.locals.redirectUrl = req.session.redirectUrl;
@@ -39,9 +39,8 @@ module.exports.saveRedirectUrl = (req, res, next) => {
   next();
 };
 
-// =============================
-// 👤 OWNER CHECK
-// =============================
+//OWNER CHECK
+
 module.exports.isOwner = async (req, res, next) => {
   const { id } = req.params;
   const list = await Listing.findById(id);
@@ -62,14 +61,14 @@ module.exports.isOwner = async (req, res, next) => {
   next();
 };
 
-// =============================
-// ✍️ REVIEW AUTHOR CHECK
-// =============================
+
+//REVIEW AUTHOR CHECK
+
 module.exports.isAuthor = async (req, res, next) => {
   const { id, ReviewId } = req.params;
   const review = await Review.findById(ReviewId);
 
-  // 🔐 safe comparison
+  //safe comparison
   if (
     !req.user ||
     review.author.toString() !== req.user._id.toString()
@@ -88,9 +87,9 @@ module.exports.isAuthor = async (req, res, next) => {
   next();
 };
 
-// =============================
-// ✅ LISTING VALIDATION
-// =============================
+
+//LISTING VALIDATION
+
 module.exports.validate = (req, res, next) => {
   const { error } = listingSchema.validate(req.body);
 
@@ -110,9 +109,8 @@ module.exports.validate = (req, res, next) => {
   next();
 };
 
-// =============================
-// ✅ REVIEW VALIDATION
-// =============================
+// REVIEW VALIDATION
+
 module.exports.reviewValidate = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
 

@@ -67,13 +67,13 @@ module.exports.show = async (req, res, next) => {
 module.exports.edit = async (req, res, next) => {
     const { id } = req.params;
 
-    // ✅ Only geocode if location is provided & not empty
+    //Only geocode if location is provided & not empty
     let geometry;
     if (req.body.location && req.body.location.trim() !== "") {
       geometry = await getCoordinates(req.body.location);
     }
 
-    // ✅ Prepare update object (clean + flexible)
+    //Prepare update object (clean + flexible)
     const updatedData = {
       title: req.body.title,
       desc: req.body.desc,
@@ -83,17 +83,17 @@ module.exports.edit = async (req, res, next) => {
       category: req.body.category,
     };
 
-    // ✅ Add geometry only if it exists
+    //Add geometry only if it exists
     if (geometry) {
       updatedData.geometry = geometry;
     }
 
-    // ✅ Update listing
+    //Update listing
     const list = await Listing.findByIdAndUpdate(id, updatedData, {
       new: true,
     });
 
-    // ❌ If not found
+    //If not found
     if (!list) {
       return res.status(404).json({
         success: false,
@@ -101,13 +101,13 @@ module.exports.edit = async (req, res, next) => {
       });
     }
 
-    // ✅ Handle image update properly
+    //Handle image update properly
     if (req.file) {
       list.image = {
         url: req.file.path,
         filename: req.file.filename,
       };
-      await list.save(); // 🔥 MUST save after modifying image
+      await list.save(); 
     }
 
     res.json({

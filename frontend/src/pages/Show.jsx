@@ -191,9 +191,9 @@ const Show = () => {
               }}
               size="large"
               sx={{
-                color: "#facc15", // filled stars (yellow)
+                color: "#facc15", 
                 "& .MuiRating-iconEmpty": {
-                  color: "#555", // 👈 visible empty stars (gray)
+                  color: "#555", 
                 },
               }}
             />

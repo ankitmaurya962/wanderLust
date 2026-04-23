@@ -12,7 +12,7 @@ const ListingCard = ({ list, onClick }) => {
           className="h-[250px] w-full object-cover transition duration-500 group-hover:scale-110"
         />
 
-        {/* 🔥 Overlay on hover */}
+        {/* Overlay on hover */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition duration-300"></div>
       </div>
 

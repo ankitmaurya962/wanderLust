@@ -175,7 +175,7 @@ const Edit = () => {
               />
             )}
 
-            {/* 🔥 Custom Dropdown (opens upward) */}
+            {/* Custom Dropdown (opens upward) */}
             <div className="relative">
               <div
                 onClick={() => setOpen(!open)}

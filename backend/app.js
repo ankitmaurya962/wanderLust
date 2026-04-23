@@ -26,11 +26,11 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 
 const isProduction = process.env.NODE_ENV === "production";
-// ✅ TRUST PROXY (IMPORTANT FOR RENDER)
+//TRUST PROXY (IMPORTANT FOR RENDER)
 app.set("trust proxy", 1);
 
 
-// ✅ CORS CONFIG (VERY IMPORTANT)
+//CORS CONFIG (VERY IMPORTANT)
 app.use(
   cors({
     origin: [
@@ -63,8 +63,8 @@ const sessionOption = {
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: isProduction,                     // 🔥 key
-    sameSite: isProduction ? "none" : "lax",  // 🔥 key
+    secure: isProduction,                   
+    sameSite: isProduction ? "none" : "lax",  
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   },
@@ -91,7 +91,7 @@ const bookingRoute = require("./routes/api/bookingRoute.js");
 const myBookingRoute = require("./routes/api/myBookingRoute.js");
 
 
-// ✅ SESSION MUST COME AFTER CORS
+//SESSION MUST COME AFTER CORS
 app.use(session(sessionOption));
 app.use(flash());
 
@@ -139,7 +139,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   let { status = 500, message = "something went wrong" } = err;
   if (res.headersSent) {
-    return next(err); // 🔥 THIS FIXES YOUR BUG
+    return next(err); 
   }
   if (req.originalUrl.startsWith("/api")) {
     return res.status(status).json({

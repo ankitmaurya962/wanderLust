@@ -182,7 +182,7 @@ const MyBooking = () => {
         )}
       </div>
 
-      {/* 🔥 MODAL (UPGRADED) */}
+      {/*MODAL (UPGRADED) */}
       {selectedBooking && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white/10 backdrop-blur-lg border border-white/20 text-white p-6 rounded-2xl w-80 shadow-2xl animate-fadeIn">

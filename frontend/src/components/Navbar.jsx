@@ -107,7 +107,7 @@ const Navbar = () => {
             to="/listings/new"
             className="bg-yellow-400 text-black px-4 py-2 rounded-full font-medium"
           >
-            Add Listing
+            Become a host
           </Link>
         </div>
 
@@ -179,7 +179,7 @@ const Navbar = () => {
             onClick={() => setMenuOpen(false)}
             className="bg-yellow-400 text-black px-4 py-2 rounded-lg text-center font-medium"
           >
-            Add Listing
+            Become a host
           </Link>
         </div>
       )}

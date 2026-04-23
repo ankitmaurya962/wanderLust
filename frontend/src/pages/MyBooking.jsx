@@ -93,7 +93,7 @@ const MyBooking = () => {
             {bookings.map((b) => (
               <div
                 key={b._id}
-                className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 flex gap-5 hover:scale-[1.02] transition duration-300 shadow-lg"
+                className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 flex flex-col md:flex-row gap-5 hover:scale-[1.02] transition duration-300 shadow-lg"
               >
                 {b.bookingStatus === "cancelled" && (
                   <button
@@ -107,7 +107,7 @@ const MyBooking = () => {
                 {/* image */}
                 <img
                   src={b.listing?.image?.url}
-                  className="w-40 h-40 object-cover rounded-xl"
+                  className="w-full h-48 md:w-40 md:h-40 object-cover rounded-xl"
                   alt=""
                 />
 
@@ -150,10 +150,10 @@ const MyBooking = () => {
                   </div>
 
                   {/* actions */}
-                  <div className="mt-4 flex items-center justify-between">
+                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:justify-between">
                     {/* LEFT SIDE */}
                     <button
-                      className="bg-yellow-400 text-black px-4 py-1.5 rounded-full font-medium hover:bg-yellow-300 transition"
+                      className="bg-yellow-400 text-black px-4 py-1.5 rounded-full font-medium hover:bg-yellow-300 transition w-full sm:w-auto"
                       onClick={() => navigate(`/listings/${b.listing?._id}`)}
                     >
                       View
@@ -163,7 +163,7 @@ const MyBooking = () => {
                     <div>
                       {b.bookingStatus === "confirmed" ? (
                         <button
-                          className="bg-red-500 px-4 py-1.5 rounded-full hover:bg-red-600 transition"
+                          className="bg-red-500 px-4 py-1.5 rounded-full hover:bg-red-600 transition w-full sm:w-auto"
                           onClick={() => openCancelModal(b._id)}
                         >
                           Cancel Booking
@@ -210,7 +210,7 @@ const MyBooking = () => {
               </>
             )}
 
-            <div className="flex justify-between gap-3 mt-4">
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <button
                 className="w-full py-1.5 rounded-full bg-gray-600 hover:bg-gray-500 transition"
                 onClick={() => {

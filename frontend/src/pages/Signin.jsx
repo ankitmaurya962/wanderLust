@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
 
 const Signin = () => {
-  const { setUser } = useContext(AuthContext);
+  const { user, setUser, loading } = useContext(AuthContext);
 
   const [login, setlogin] = useState({
     username: "",
@@ -17,6 +17,14 @@ const Signin = () => {
   const location = useLocation();
 
   const from = location.state?.from || "/listings";
+
+  useEffect(() => {
+  if (!loading && user) {
+    toast.error("Already logged in");
+    navigate(from, { replace: true });
+  }
+}, [loading, user, navigate, from]);
+
 
   const submitHandler = async (e) => {
     e.preventDefault();

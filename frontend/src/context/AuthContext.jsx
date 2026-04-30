@@ -4,7 +4,9 @@ import API from "../utils/api";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  // AuthContext.jsx
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -14,7 +16,9 @@ export const AuthProvider = ({ children }) => {
         });
         setUser(res.data);
       } catch (err) {
-        console.log(err);
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -22,7 +26,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, loading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -2,6 +2,7 @@ const Listing = require("./models/listing");
 const { listingSchema, reviewSchema, bookingSchema } = require("./schema");
 const CustomError = require("./utils/CustomError");
 const Review = require("./models/review");
+const mongoose = require("mongoose");
 
 // Helper: detect API request
 const isApiRequest = (req) => req.originalUrl.startsWith("/api");
@@ -149,3 +150,18 @@ module.exports.bookingValidate = (req, res, next) => {
 
   next();
 };
+
+//ObjectId Validation
+module.exports.validateObjectId = (req, res, next) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({
+      success: false,
+      message: "Listing not found",
+    });
+  }
+
+  next();
+};
+

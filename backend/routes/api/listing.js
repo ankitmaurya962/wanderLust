@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../../utils/wrapAsync")
 const apiListingController = require("../../controllers/apiListings");
-const {isLoggedIn, validate, isOwner} = require("../../middleware")
+const {isLoggedIn, validate, isOwner, validateObjectId} = require("../../middleware")
 const multer = require('multer')
 const {storage} = require("../../cloudConfig");
 const upload = multer({storage})
@@ -17,8 +17,8 @@ router
 
 router
   .route("/:id")
-  .get(wrapAsync(apiListingController.show))
-  .patch(isLoggedIn, upload.single("image") ,validate, isOwner, wrapAsync(apiListingController.edit)) //edit 
-  .delete(isLoggedIn, isOwner, wrapAsync(apiListingController.delete)); //delete
+  .get(validateObjectId, wrapAsync(apiListingController.show))
+  .patch(isLoggedIn, validateObjectId, upload.single("image") ,validate, isOwner, wrapAsync(apiListingController.edit)) //edit 
+  .delete(isLoggedIn, validateObjectId, isOwner, wrapAsync(apiListingController.delete)); //delete
 
 module.exports = router;

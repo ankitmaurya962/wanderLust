@@ -4,16 +4,16 @@ import { AuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
 
 const ProtectedRoute = ({ children }) => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   const location = useLocation();
 
-  if (user === undefined) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
 
   if (!user) {
     return (
       <Navigate
         to="/signin"
-        state={{ from: location.pathname, message: "Please login first 🔒" }}
+        state={{ from: location.pathname, message: "Please login first" }}
         replace
       />
     );

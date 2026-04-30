@@ -29,8 +29,12 @@ const Show = () => {
         const res = await API.get(`/api/listings/${id}`);
         setListing(res.data);
       } catch (err) {
-        console.error(err);
-        setError("Failed to load listing");
+        if (err.response?.status === 404) {
+          navigate("/not-found", { replace: true });
+          return;
+        }
+
+        toast.error("Something went wrong");
       } finally {
         setLoading(false);
       }
@@ -191,9 +195,9 @@ const Show = () => {
               }}
               size="large"
               sx={{
-                color: "#facc15", 
+                color: "#facc15",
                 "& .MuiRating-iconEmpty": {
-                  color: "#555", 
+                  color: "#555",
                 },
               }}
             />

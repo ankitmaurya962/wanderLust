@@ -3,6 +3,7 @@ import API from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
+import { motion } from "framer-motion";
 
 const New = () => {
   const navigate = useNavigate();
@@ -80,6 +81,13 @@ const New = () => {
   const [open, setOpen] = useState(false);
   return (
     <div className="min-h-screen bg-black text-white">
+      {/* animation */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+      />
+
       {/* Navbar */}
       <Navbar />
 

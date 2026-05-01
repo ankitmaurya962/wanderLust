@@ -41,7 +41,7 @@ const Show = () => {
     };
 
     fetchListing();
-  }, [id]);
+  }, [id, navigate]);
 
   const handleDeleteListing = async () => {
     const toastId = toast.loading("Deleting listing...");

@@ -4,11 +4,22 @@ import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AuthContext } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
+import { FaRegCompass } from "react-icons/fa";
 
 const categories = [
-  "trending", "rooms", "iconic", "mountains", "castles",
-  "pools", "camping", "farms", "forest", "arctic",
-  "boat", "spiritual", "desert"
+  "trending",
+  "rooms",
+  "iconic",
+  "mountains",
+  "castles",
+  "pools",
+  "camping",
+  "farms",
+  "forest",
+  "arctic",
+  "boat",
+  "spiritual",
+  "desert",
 ];
 
 const Edit = () => {
@@ -115,8 +126,9 @@ const Edit = () => {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-black text-white">
-        Loading...
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-black text-white">
+        <FaRegCompass className="text-5xl text-yellow-400 animate-spin" />
+        <p className="text-sm tracking-wide text-gray-300">Loading...</p>
       </div>
     );
   }
@@ -131,18 +143,15 @@ const Edit = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-
       <Navbar />
 
       <div className="pt-24 flex justify-center px-4">
         <div className="w-full max-w-2xl bg-white/5 border border-white/10 rounded-2xl p-8">
-
           <h2 className="text-3xl font-semibold mb-6 text-center">
             Edit Listing
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-
             <input
               name="title"
               value={form.title}
@@ -234,7 +243,6 @@ const Edit = () => {
             <button className="w-full bg-yellow-400 text-black py-2 rounded-full font-semibold hover:bg-yellow-300">
               Update Listing
             </button>
-
           </form>
         </div>
       </div>

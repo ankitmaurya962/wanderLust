@@ -5,7 +5,7 @@ import ListingCard from "../components/ListingCard";
 import CategoryBar from "../components/CategoryBar";
 import Navbar from "../components/Navbar";
 import toast from "react-hot-toast";
-
+import { FaRegCompass } from "react-icons/fa";
 
 const Index = () => {
   const [listings, setListings] = useState([]);
@@ -47,8 +47,9 @@ const Index = () => {
   // Loading UI
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-black text-white">
-        <h2 className="text-lg animate-pulse">Loading listings...</h2>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-black text-white">
+        <FaRegCompass className="text-5xl text-yellow-400 animate-spin" />
+        <p className="text-sm tracking-wide text-gray-300">Loading...</p>
       </div>
     );
   }
@@ -64,26 +65,21 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-
       {/* Navbar */}
       <Navbar />
 
       {/* Content */}
       <div className="pt-24 px-6 md:px-12 pb-10">
-
         {/* Category Bar */}
         <div className="mb-8">
           <CategoryBar />
         </div>
 
         {/* Heading */}
-        <h2 className="text-2xl font-semibold mb-6">
-          Explore Places
-        </h2>
+        <h2 className="text-2xl font-semibold mb-6">Explore Places</h2>
 
         {/* Listings Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-
           {listings.length > 0 ? (
             listings.map((list) => (
               <div
@@ -99,7 +95,6 @@ const Index = () => {
               No listings found
             </p>
           )}
-
         </div>
       </div>
     </div>

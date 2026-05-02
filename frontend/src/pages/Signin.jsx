@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import API from "../utils/api";
 import { AuthContext } from "../context/AuthContext";
@@ -7,6 +7,7 @@ import Navbar from "../components/Navbar";
 
 const Signin = () => {
   const { user, setUser, loading } = useContext(AuthContext);
+  const loginSubmitted = useRef(false);
 
   const [login, setlogin] = useState({
     username: "",
@@ -20,7 +21,9 @@ const Signin = () => {
 
   useEffect(() => {
   if (!loading && user) {
-    toast.error("Already logged in");
+    if (!loginSubmitted.current) {
+      toast.error("Already logged in");
+    }
     navigate(from, { replace: true });
   }
 }, [loading, user, navigate, from]);
@@ -37,6 +40,7 @@ const Signin = () => {
       });
 
       if (res.data.success) {
+        loginSubmitted.current = true;
         setUser(res.data.user);
         toast.success("Login successful ✅", { id: toastId });
         navigate(from, { replace: true });

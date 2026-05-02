@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Index from "./pages/Index";
 import Show from "./pages/Show";
@@ -33,10 +32,25 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="/listings/:id/edit" element={<Edit />} />
+          <Route
+            path="/listings/:id/edit"
+            element={
+              <ProtectedRoute>
+                <Edit />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
-          <Route path="/mybooking" element={<MyBooking />} />
+         <Route
+            path="/mybooking"
+            element={
+              <ProtectedRoute>
+                <MyBooking />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/not-found" element={<NotFound />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

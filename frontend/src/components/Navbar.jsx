@@ -34,9 +34,9 @@ const Navbar = () => {
     const toastId = toast.loading("Logging out...");
     try {
       await API.get("/api/logout", { withCredentials: true });
-      setUser(null);
       toast.success("Logged out 👋", { id: toastId });
-      navigate("/");
+      navigate("/", { replace: true });
+      setUser(null);
       setDropdownOpen(false);
       setMenuOpen(false);
     } catch {

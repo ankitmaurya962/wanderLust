@@ -8,6 +8,7 @@ import StarRating from "../components/StarRating";
 import Rating from "@mui/material/Rating";
 import Navbar from "../components/Navbar";
 import Booking from "../components/Booking";
+import { FaRegCompass } from "react-icons/fa";
 
 const Show = () => {
   const { id } = useParams();
@@ -96,8 +97,9 @@ const Show = () => {
   // UI states
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-black text-white">
-        Loading...
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-black text-white">
+        <FaRegCompass className="text-5xl text-yellow-400 animate-spin" />
+        <p className="text-sm tracking-wide text-gray-300">Loading...</p>
       </div>
     );
   }

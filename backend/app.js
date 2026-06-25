@@ -2,28 +2,18 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
-const path = require("path");
-const methodOverride = require("method-override");
-const ejsMate = require("ejs-mate");
 const CustomError = require("./utils/CustomError");
 const session = require("express-session");
 const MongoStore = require("connect-mongo").default;
-const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
 const cors = require("cors"); 
 const User = require("./models/user.js");
-const wrapAsync = require("./utils/wrapAsync.js");
 
 const app = express();
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
-app.engine("ejs", ejsMate);
-app.use(express.static(path.join(__dirname, "public")));
 
 const isProduction = process.env.NODE_ENV === "production";
 //TRUST PROXY (IMPORTANT FOR RENDER)
@@ -79,11 +69,9 @@ main()
 
 
 // ROUTES
-const listingRouter = require("./routes/listing.js");
+
 const apiListingRouter = require("./routes/api/listing.js");
-const reviewRouter = require("./routes/review.js");
 const apiReviewRouter = require("./routes/api/review.js");
-const userRouter = require("./routes/user.js");
 const apiUserRouter = require("./routes/api/user.js");
 const razorpayroute = require("./routes/api/razorpayroute.js");
 const verifyroute = require("./routes/api/verifyroute.js");
@@ -93,7 +81,6 @@ const myBookingRoute = require("./routes/api/myBookingRoute.js");
 
 //SESSION MUST COME AFTER CORS
 app.use(session(sessionOption));
-app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -102,33 +89,22 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// FLASH MIDDLEWARE
-app.use((req, res, next) => {
-  res.locals.msg = req.flash("success");
-  res.locals.error = req.flash("error");
-  res.locals.currUser = req.user;
-  next();
-});
-
 // ROUTES
-app.use("/listing", listingRouter);
+
 app.use("/api/listings", apiListingRouter);
-app.use("/listing/:id", reviewRouter);
 app.use("/api/listings/:id", apiReviewRouter);
-app.use("/", userRouter);
 app.use("/api", apiUserRouter);
 app.use('/api', razorpayroute);
 app.use('/api', verifyroute);
 app.use('/api', bookingRoute);
 app.use('/api', myBookingRoute);
 
-// HOME
-app.get(
-  "/",
-  wrapAsync(async (req, res, next) => {
-    res.render("listing/home");
-  })
-);
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "WanderLust API is running",
+  });
+});
 
 // 404 HANDLER
 app.use((req, res, next) => {
@@ -141,14 +117,11 @@ app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err); 
   }
-  if (req.originalUrl.startsWith("/api")) {
-    return res.status(status).json({
-      success: false,
-      message,
-    });
-  }
 
-  res.status(status).render("error", { message });
+  res.status(status).json({
+    success: false,
+    message,
+  });
 });
 
 app.listen(8080, () => {

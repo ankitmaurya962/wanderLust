@@ -72,6 +72,7 @@ module.exports.cancelBooking = async (req, res, next) => {
   const { id } = req.params;
 
   const booking = await Booking.findById(id);
+  console.log("Payment ID:", booking.paymentId);
 
   if (!booking) {
     return res.status(404).json({ message: "Booking not found" });
@@ -97,13 +98,25 @@ module.exports.cancelBooking = async (req, res, next) => {
     await booking.save();
     return res.json({ message: "Booking cancelled. No refund applicable." });
   }
-  const refund = await razorpay.payments.refund(booking.paymentId, {
-    amount: Math.round(refundAmount * 100),
-  });
+  try {
 
-  booking.bookingStatus = "cancelled";
-  await booking.save();
-  res.json(refund);
+    const refund = await razorpay.payments.refund(booking.paymentId, {
+      amount: Math.round(refundAmount * 100),
+    });
+    booking.bookingStatus = "cancelled";
+    await booking.save();
+
+    res.json(refund);
+  } catch (err) {
+    console.error("Refund Error:");
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+      message: err.message,
+      error: err.error || err,
+    });
+  }
 };
 
 module.exports.deleteBooking = async (req, res, next) => {

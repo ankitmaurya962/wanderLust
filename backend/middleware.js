@@ -1,42 +1,18 @@
 const Listing = require("./models/listing");
 const { listingSchema, reviewSchema, bookingSchema } = require("./schema");
-const CustomError = require("./utils/CustomError");
 const Review = require("./models/review");
 const mongoose = require("mongoose");
-
-// Helper: detect API request
-const isApiRequest = (req) => req.originalUrl.startsWith("/api");
-
 
 // AUTH CHECK
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
-
-    //React / API
-    if (isApiRequest(req)) {
-      return res.status(401).json({
-        success: false,
-        message: "You must login first",
-      });
-    }
-
-    // EJS (existing site)
-    req.session.redirectUrl = req.originalUrl;
-    req.flash("error", "You must login first!");
-    return res.redirect("/signin");
+    return res.status(401).json({
+      success: false,
+      message: "You must login first",
+    });
   }
 
-  next();
-};
-
-
-//SAVE REDIRECT (EJS only)
-
-module.exports.saveRedirectUrl = (req, res, next) => {
-  if (!isApiRequest(req) && req.session.redirectUrl) {
-    res.locals.redirectUrl = req.session.redirectUrl;
-  }
   next();
 };
 
@@ -46,17 +22,18 @@ module.exports.isOwner = async (req, res, next) => {
   const { id } = req.params;
   const list = await Listing.findById(id);
 
+  if (!list) {
+    return res.status(404).json({
+      success: false,
+      message: "Listing not found",
+    });
+  }
+
   if (!req.user || !list.owner._id.equals(req.user._id)) {
-
-    if (isApiRequest(req)) {
-      return res.status(403).json({
-        success: false,
-        message: "You are not owner of this listing",
-      });
-    }
-
-    req.flash("error", "You are not owner of listing");
-    return res.redirect(`/listing/${id}`);
+    return res.status(403).json({
+      success: false,
+      message: "You are not owner of this listing",
+    });
   }
 
   next();
@@ -66,23 +43,25 @@ module.exports.isOwner = async (req, res, next) => {
 //REVIEW AUTHOR CHECK
 
 module.exports.isAuthor = async (req, res, next) => {
-  const { id, ReviewId } = req.params;
+  const { ReviewId } = req.params;
   const review = await Review.findById(ReviewId);
+
+  if (!review) {
+    return res.status(404).json({
+      success: false,
+      message: "Review not found",
+    });
+  }
 
   //safe comparison
   if (
     !req.user ||
     review.author.toString() !== req.user._id.toString()
   ) {
-    if (isApiRequest(req)) {
-      return res.status(403).json({
-        success: false,
-        message: "You cannot edit others review",
-      });
-    }
-
-    req.flash("error", "You cannot edit others review");
-    return res.redirect(`/listing/${id}`);
+    return res.status(403).json({
+      success: false,
+      message: "You cannot edit others review",
+    });
   }
 
   next();
@@ -97,14 +76,10 @@ module.exports.validate = (req, res, next) => {
   if (error) {
     const errMsg = error.details.map((el) => el.message).join(",");
 
-    if (isApiRequest(req)) {
-      return res.status(400).json({
-        success: false,
-        message: errMsg,
-      });
-    }
-
-    throw new CustomError(400, errMsg);
+    return res.status(400).json({
+      success: false,
+      message: errMsg,
+    });
   }
 
   next();
@@ -118,14 +93,10 @@ module.exports.reviewValidate = (req, res, next) => {
   if (error) {
     const errMsg = error.details.map((el) => el.message).join(",");
 
-    if (isApiRequest(req)) {
-      return res.status(400).json({
-        success: false,
-        message: errMsg,
-      });
-    }
-
-    throw new CustomError(400, errMsg);
+    return res.status(400).json({
+      success: false,
+      message: errMsg,
+    });
   }
 
   next();
@@ -138,14 +109,10 @@ module.exports.bookingValidate = (req, res, next) => {
   if (error) {
     const errMsg = error.details.map((el) => el.message).join(",");
 
-    if (isApiRequest(req)) {
-      return res.status(400).json({
-        success: false,
-        message: errMsg,
-      });
-    }
-
-    throw new CustomError(400, errMsg);
+    return res.status(400).json({
+      success: false,
+      message: errMsg,
+    });
   }
 
   next();
